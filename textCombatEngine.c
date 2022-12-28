@@ -84,6 +84,7 @@ int gameController();
 void printOut (char *queuedMessages);
 char* hitOrMissMessages(int trigger);
 char* deadMessage(int trigger);
+char* deadAndQuitMessage(int trigger);
 int enQueue(struct Queue* q, char *k);
 void deQueue(struct Queue* q);
 
@@ -121,6 +122,10 @@ int main (void) {
                      queuedMessage = deadMessage(1);
                      enQueue(q, queuedMessage); 
                      }
+                }
+                else if (areTheyDead(Villain) && Villain->characterStats.currenthp <= 0 ){
+                    queuedMessage = deadAndQuitMessage(1);
+                    enQueue(q, queuedMessage);
                 }
             else {
                 hitMissVar = false; 
@@ -210,7 +215,8 @@ void displayStats (Entity *Target) {
     clearAndMove(10, 0);
     clearAndMove(11, 0);
     clearAndMove(12, 0);
-    mvprintw(10,0,"\nName: %s\nHealth: %d\nMP: %d\n", Target->name, Target->characterStats.currenthp, Target->characterStats.currentmp); }
+    mvprintw(10,0,"\nName: %s\nHealth: %d\nMP: %d\n", Target->name, Target->characterStats.currenthp, Target->characterStats.currentmp); 
+}
 
 void setName(Entity *Target, char name[50]) {
     strcpy(Target->name, name);
@@ -319,6 +325,15 @@ char* deadMessage(int trigger) {
     } return dead;
 }
 
+// function to display message that the villain is dead and it's time to quit the program
+char* deadAndQuitMessage(int trigger){
+    char *timeToQuit = "";
+    if (trigger == 1){
+        timeToQuit = "Okay, they're dead! Stop beating a dead horse and press 'q' to quit please!";
+        return timeToQuit;
+    } return timeToQuit;
+}
+
 // Function to spit back hit or miss - use 1 for hit and 0 for miss
 char* hitOrMissMessages(int trigger) {
     char *hit = "Hit!";  
@@ -330,13 +345,10 @@ char* hitOrMissMessages(int trigger) {
 
 // Function to print strings passed to it. Potentially need to incorporate a Entity* Target arg. so we can
 // display characters names in strings
-void printOut (/*int messageCounter,*/ char *queuedMessages){
+void printOut (char *queuedMessages){
     char *messageToPrint = queuedMessages;
-    //for (int count = 0; count < messageQueue_length; count++) {
         clearAndMove(0, 10);
         mvprintw(4, 4, "%s\n", messageToPrint);
-        // clearAndMove(0, 10); 
-        //}
 }
  
 // The function to add a key k to q
