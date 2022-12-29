@@ -65,7 +65,8 @@ typedef struct {
 } Entity;
 
 // Function prototypes - see the function declarations at the bottom for more information
-void displayStats(Entity *Target);
+
+void displayStats(Entity *Target, int trigger);
 void setName(Entity *Target, char name[50]);
 Entity* newEntity(class class, char name[50]);
 void displayMenu();
@@ -117,11 +118,12 @@ int main (void) {
 
                 queuedMessage = hitOrMissMessages(1);
                 enQueue(q, queuedMessage);
-                displayStats(Villain);
+                displayStats(Villain, 1);
                 if (areTheyDead(Villain)) {
-                     queuedMessage = deadMessage(1);
-                     enQueue(q, queuedMessage); 
-                     }
+                    queuedMessage = deadMessage(1);
+                    displayStats(Villain, 0);
+                    enQueue(q, queuedMessage); 
+                    }
                 }
                 else if (areTheyDead(Villain) && Villain->characterStats.currenthp <= 0 ){
                     queuedMessage = deadAndQuitMessage(1);
@@ -211,11 +213,20 @@ switch(class){
     return(tempEntity);     // return memory address of player.
 }
 
-void displayStats (Entity *Target) {
-    clearAndMove(10, 0);
-    clearAndMove(11, 0);
-    clearAndMove(12, 0);
-    mvprintw(10,0,"\nName: %s\nHealth: %d\nMP: %d\n", Target->name, Target->characterStats.currenthp, Target->characterStats.currentmp); 
+// when trigger is passed a 1, then show stats
+    // else if trigger is passed a 0, don't show stats
+void displayStats (Entity *Target, int trigger) {
+    if (trigger == 1) {
+        clearAndMove(10, 0);
+        clearAndMove(11, 0);
+        clearAndMove(12, 0);
+        mvprintw(10,0,"\nName: %s\nHealth: %d\nMP: %d\n", Target->name, Target->characterStats.currenthp, Target->characterStats.currentmp); 
+    } else if (trigger == 0) {
+        clearAndMove(10, 0);
+        clearAndMove(11, 0);
+        clearAndMove(12, 0);
+        clearAndMove(13, 0);
+    } 
 }
 
 void setName(Entity *Target, char name[50]) {
