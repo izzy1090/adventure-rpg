@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "attack.h"
 
 // stateMachine gameState = Exploration;
 // stateMachine_Title titleState = Title_TitleScreen;
@@ -18,11 +19,19 @@
 bool stateInitialize = TRUE;
 
 int main () {
-    beginNcurses();
+    
+    Entity *Hero = newEntity(WARRIOR, "Jima");
+
+    beginNCurses();
+    char *queuedMessage = "hey";
+    struct Queue* q = createQueue();
+
+    refresh();
     while (1){
-        refresh();
-        mvprintw(10, 35, "Hello world!");
+        clearAndMove(10, 10);
+        displayMenu();
     }
-    endNcurses();
+    
+    endNCurses();
     return 0;
 }

@@ -3,6 +3,7 @@
         "stdio.h": "c",
         "displaymenu.h": "c",
         "stdbool.h": "c",
-        "defines.h": "c"
+        "defines.h": "c",
+        "stdlib.h": "c"
     }
 }
