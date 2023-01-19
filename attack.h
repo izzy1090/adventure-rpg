@@ -1,6 +1,7 @@
-#ifndef _ATTACK_
-#define _ATTACK_
+#ifndef _ATTACK_H
+#define _ATTACK_H
 
+    #include <stdio.h>
     #include "defines.h"
 
     void displayStats(Entity *Target, int trigger);

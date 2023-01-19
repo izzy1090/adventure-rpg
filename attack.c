@@ -1,5 +1,5 @@
-#include "attack.h"
 #include "defines.h"
+#include "attack.h"
 
 // when trigger is passed a 1, then show stats
 // else if trigger is passed a 0, don't show stats

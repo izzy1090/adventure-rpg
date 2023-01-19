@@ -1,5 +1,4 @@
-#include "defines.h"
-#include "attack.h"
+#include "test.h"
 
 // stateMachine gameState = Exploration;
 // stateMachine_Title titleState = Title_TitleScreen;
@@ -16,22 +15,17 @@
 // stateMachine_GameOver_Lose gameOverLoseState = Gameover_Lose_Animation;
 // stateMachine_MainMenu mainMenuState = MainMenu_Display;
 
-bool stateInitialize = TRUE;
+// bool stateInitialize = TRUE;
 
-int main () {
-    
-    Entity *Hero = newEntity(WARRIOR, "Jima");
-
+int main (void) {
+   
     beginNCurses();
-    char *queuedMessage = "hey";
-    struct Queue* q = createQueue();
-
+    displayMenu();
     refresh();
     while (1){
-        clearAndMove(10, 10);
-        displayMenu();
+        
+        
     }
-    
     endNCurses();
     return 0;
 }
