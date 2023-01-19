@@ -101,7 +101,6 @@ int main (void) {
     bool hitMissVar;
     int damageVar;
     float hitPercentageFloat; 
-    // char *currentMessage = NULL;
     char *queuedMessage = NULL;
     struct Queue* q = createQueue();
 
