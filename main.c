@@ -1,6 +1,5 @@
 #include "defines.h"
 
-
 int main () {
     beginNcurses();
     while (1){

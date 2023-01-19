@@ -6,6 +6,24 @@
 
 /*==============================================*
 
+    Here lies the State Machine declarations. 
+        These should go in the ".h" files. 
+
+*==============================================*/
+
+typedef enum { Exploration_Move_Player, Exploration_EnemyPatrol } StateMachine_Exploration;
+typedef enum { Move_PlayerForward, Move_PlayerLeft, Move_PlayerRight, Move_PlayerDown } StateMachine_Exploration_Move;
+typedef enum { EnemyPatrol_Scan, EnemyPatrol_Fight } StateMachine_Exploration_EnemyPatrol;
+// These are just potential options for the game. We don't necessarily need to program all of these right now.
+typedef enum { BattleMenu_Attack, BattleMenu_Magic, BattleMenu_Defend, BattleMenu_Items, BattleMenu_Escape } StateMachine_BattleMenu;
+typedef enum { Attack_HitCheck, Attack_DamageCalc, Attack_KillCheck } StateMachine_Attack;
+typedef enum { Attack_KillCheck_Loot} StateMachine_Attack_KillCheck;
+typedef enum { GameOver_Win, GameOver_Lose } StateMachine_GameOver;
+typedef enum { GameOver_WinCredits } StateMachine_GameOver_Win;
+typedef enum { GameOver_LoseCredits } StateMachine_GameOver_Lose;
+
+/*==============================================*
+
         Here lies the function prototypes. 
         These should go in the ".h" files. 
 
