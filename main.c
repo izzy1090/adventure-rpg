@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "attack.h"
+#include "input.h"
 
 /*=====================================================*
 
@@ -14,6 +15,9 @@
     compile.
 
 *=====================================================*/
+
+stateMachine gameState = Battle;
+bool stateInitialize = TRUE;
 
 // A node to store a queue entry - for message counter
 struct QNode {
@@ -41,12 +45,11 @@ void deQueue(struct Queue* q);
 int main (void) {
     beginNCurses();
 
-    // Global Declarations
+    // Creates the available characters for this scenario
     Entity *Hero = newEntity(WARRIOR, "Jima");
     Entity *Villain = newEntity(RANGER, "Small Monster");
 
     int ch;
-
     bool hitMissVar;
     int damageVar;
     float hitPercentageFloat; 

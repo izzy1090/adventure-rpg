@@ -88,7 +88,7 @@ void setName(Entity *Target, char name[50]) {
     return; 
 }
 
- /*==================================================*
+/*==================================================*
 
         Function declarations required 
         for UI.
@@ -129,8 +129,6 @@ void printOut (char *queuedMessages){
         mvprintw(4, 4, "%s\n", messageToPrint);
 }
 
-
-
 /*==================================================*
 
         Misc. function declarations
@@ -154,37 +152,4 @@ char* deadAndQuitMessage(int trigger){
         timeToQuit = "Okay, they're dead! Stop beating a dead horse and press 'q' to quit please!";
         return timeToQuit;
     } return timeToQuit;
-}
-
-// gameController function, much of the code below is tentative.
-int gameController() {
-    int ch;
-    keypad(stdscr, TRUE);        // This allows keypad input
-    while((ch = getch()) != KEY_ENTER){
-        switch(ch){   
-            case KEY_LEFT:
-                break;
-            case KEY_RIGHT:
-                break;
-            case KEY_DOWN:
-                break;
-            case KEY_UP:
-                break;
-            case 97: //a
-                break;
-            case 115: //s
-                break;
-            case 100: //d
-                break;
-            case 119: //w
-                break;
-            case 113: //q
-                return (ch);
-            case 101: //e
-                return (ch);
-            default:
-                break;
-        }
-    } 
-    return (ch); 
 }

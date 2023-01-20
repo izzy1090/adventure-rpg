@@ -91,7 +91,6 @@
 
     *==============================================*/
 
-    int gameController();
     char* deadMessage(int trigger);
     char* deadAndQuitMessage(int trigger);
     int classBonus(Entity *Attacker, Entity *Target, int class);
