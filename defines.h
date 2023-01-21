@@ -34,11 +34,27 @@
 
     *==================================================*/
 
-    void displayMenu();
+    // An empty node to store a queue entry - for message counter
+    struct QNode {
+        char *key;
+        struct QNode* next; 
+    };
+
+    // Used in conjunction with the createQueue() function to create a call stack
+    // and creates a place to point our front and rear nodes. Currently used
+    // for the messages.
+    struct Queue {
+        struct QNode *front, *rear; 
+    };
+
+    int enQueue(struct Queue* q, char *k);
+    void deQueue(struct Queue* q);
+    void printOut (char *queuedMessages);
+
+    // Prototypes declarations necessary for the terminal log UI, menus and messages
     void beginNCurses();
     void endNCurses();
     void clearAndMove(int row, int column);
-    void printOut (char *queuedMessages);
     
     /*==================================================*
 
@@ -73,8 +89,6 @@
         GOD_NERD,
     } Entity_Class;
 
-    
-
     // struct for creating new character stats
     typedef struct {
         Entity_Stats stats;
@@ -83,24 +97,7 @@
         char characterBio[50];
         char combat_menu_options;
     } Entity;
-
-    /*==============================================*
-
-            Here lies the function prototypes. 
-            These should go in the ".h" files. 
-
-    *==============================================*/
-
-    char* deadMessage(int trigger);
-    char* deadAndQuitMessage(int trigger);
-    int classBonus(Entity *Attacker, Entity *Target, int class);
+   
     Entity* newEntity(Entity_Class class, char name[50]);
-
-    /*===================================================*
-
-        Here lies the function declarations are below.
-        These all are going to go in the ".c" files
-
-    *===================================================*/
 
 #endif

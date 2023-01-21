@@ -1,5 +1,48 @@
 #include "defines.h"
 
+// Allocates memory for a new node that temporary holds a node being passed through the call stack.
+    struct QNode* newNode(char *key) {
+        struct QNode* temp = (struct QNode*)malloc(sizeof(struct QNode));
+        temp->key = key; 
+        temp->next = NULL;
+        return temp; 
+}
+
+// Allocates memory for a new node and inserts it to the front of the call stack.
+int enQueue(struct Queue* q, char *key) {
+    // Create a new LL node
+    struct QNode* temp = newNode(key);
+
+    // If queue is empty, then new node is moved to the head,
+    // because it's empty the tail and head are the same.
+    if (q->rear == NULL) {
+        q->front = q->rear = temp;
+        return 1;
+    }
+
+    // otherwise add a new node to the back and point the tail to null.
+    q->rear->next = temp;
+    q->rear = temp;
+    return 1;
+}
+
+// Deallocates memory required for the current node in the call stack.
+void deQueue(struct Queue* q) {
+    // If queue is empty, return NULL.
+    if (q->front == NULL){
+        return; }
+
+    // Store previous front and move front one node ahead
+    struct QNode* temp = q->front;
+
+    q->front = q->front->next;
+
+    // If front becomes NULL, then change rear also as NULL
+    if (q->front == NULL){
+        q->rear = NULL;
+    free(temp); } 
+}
+
 /*==================================================*
 
             Character function declarations.
@@ -91,17 +134,9 @@ void setName(Entity *Target, char name[50]) {
 /*==================================================*
 
         Function declarations required 
-        for UI.
+        for the UI.
 
 *==================================================*/
-
-// Displays what available actions the player has to take.
-void displayMenu() {
-    mvprintw(0,0,"\'e\' - to attack\n");
-    mvprintw(1,0,"\'q\' - to quit\n");
-    clearAndMove(3, 0);
-    return; 
-}
 
 // Begins nCurses mode as well as enables noecho mode and sets seed to 0 for random
 void beginNCurses() {
@@ -127,29 +162,4 @@ void printOut (char *queuedMessages){
     char *messageToPrint = queuedMessages;
         clearAndMove(0, 10);
         mvprintw(4, 4, "%s\n", messageToPrint);
-}
-
-/*==================================================*
-
-        Misc. function declarations
-
-*==================================================*/
-
-
-// Function to display that the enemy is dead, returns a string, enter 1 to initiate
-char* deadMessage(int trigger) {
-    char *dead = ""; 
-    if (trigger == 1){
-        dead = "They're dead!";
-        return dead;
-    } return dead;
-}
-
-// function to display message that the villain is dead and it's time to quit the program
-char* deadAndQuitMessage(int trigger){
-    char *timeToQuit = "";
-    if (trigger == 1){
-        timeToQuit = "Okay, they're dead! Stop beating a dead horse and press 'q' to quit please!";
-        return timeToQuit;
-    } return timeToQuit;
 }

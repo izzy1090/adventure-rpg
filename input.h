@@ -3,6 +3,4 @@
 
     int gameController();
 
-    extern stateMachine gameState;
-
 #endif
