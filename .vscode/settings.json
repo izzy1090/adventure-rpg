@@ -4,6 +4,7 @@
         "displaymenu.h": "c",
         "stdbool.h": "c",
         "defines.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "exploration.h": "c"
     }
 }

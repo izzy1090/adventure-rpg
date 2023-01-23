@@ -1,4 +1,3 @@
-#include "defines.h"
 #include "input.h"
 
 // Used to detect input from the keyboard and then return integers 
@@ -10,13 +9,13 @@ int gameController() {
     while((change = getch()) != KEY_ENTER){
         switch(change){   
             case KEY_LEFT:
-                break;
+                return (change);
             case KEY_RIGHT:
-                break;
+                return (change);
             case KEY_DOWN:
-                break;
+                return (change);
             case KEY_UP:
-                break;
+                return (change);
             case 97: //a
                 break;
             case 115: //s

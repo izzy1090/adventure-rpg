@@ -1,29 +1,4 @@
-#include "defines.h"
 #include "attack.h"
-
-// when trigger is passed a 1, then show stats
-// else if trigger is passed a 0, don't show stats
-void displayStats (Entity *Target, int trigger) {
-    if (trigger == 1) {
-        clearAndMove(10, 0);
-        clearAndMove(11, 0);
-        clearAndMove(12, 0);
-        mvprintw(10,0,"\nName: %s\nHealth: %d\nMP: %d\n", Target->name, Target->stats.currenthp, Target->stats.currentmp); 
-    } else if (trigger == 0) {
-        clearAndMove(10, 0);
-        clearAndMove(11, 0);
-        clearAndMove(12, 0);
-        clearAndMove(13, 0);
-    } 
-}
-
-// Displays what available actions the player has to take.
-void battleMenu() {
-    mvprintw(0,0,"\'e\' - to attack\n");
-    mvprintw(1,0,"\'q\' - to quit\n");
-    clearAndMove(3, 0);
-    return; 
-}
 
 // Dice roll function to determine probabilities. Helpful for hitPercentage, damageCalc, etc.
 int system_DiceRoll(int maximum, int minimum, int add_to_roll, int subtract_from_roll) {
@@ -93,44 +68,6 @@ bool areTheyDead(Entity *Target) {
     } return deadStatus; 
 }
 
-// Function to spit back hit or miss - use 1 for hit and 0 for miss
-char* hitOrMissMessages(int trigger) {
-    char *hit = "Hit!";  
-    char *miss = "Miss!";
-    if (trigger == 1){
-        return hit; } 
-    return miss;
-}
-
-// Function to display that the enemy is dead, returns a string, enter 1 to initiate
-char* deadMessage(int trigger) {
-    char *dead = ""; 
-    if (trigger == 1){
-        dead = "They're dead!";
-        return dead;
-    } return dead;
-}
-
-// function to display message that the villain is dead and it's time to quit the program
-char* deadAndQuitMessage(int trigger){
-    char *timeToQuit = "";
-    if (trigger == 1){
-        timeToQuit = "Okay, they're dead! Stop beating a dead horse and press 'q' to quit please!";
-        return timeToQuit;
-    } return timeToQuit;
-}
-
-
-// Create an empty linked list container which is used 
-// to insert nodes at the front or back of the queue.
-
-// This function declaration will live
-struct Queue* createQueue() {
-    struct Queue* q = (struct Queue*)malloc(sizeof(struct Queue));
-    q->front = q->rear = NULL;
-    return q; 
-}
-
 // This is the current game loop that's invoked when the battle state is active. 
 // This is temporary and needs to be reorganized according to how we want our
 // state machine switches to flow.
@@ -144,7 +81,6 @@ void initializeBattle(){
     int damageVar;
     float hitPercentageFloat; 
     char *queuedMessage = NULL;
-    struct Queue* q = createQueue();
 
     battleMenu();
     while (ch != 'q'){
@@ -156,25 +92,22 @@ void initializeBattle(){
                 damageDealt(Villain, damageVar);
 
                 queuedMessage = hitOrMissMessages(1);
-                enQueue(q, queuedMessage);
+                callStack(queuedMessage);
                 displayStats(Villain, 1);
                 if (areTheyDead(Villain)) {
                     queuedMessage = deadMessage(1);
                     displayStats(Villain, 0);
-                    enQueue(q, queuedMessage); 
+                    callStack(queuedMessage); 
                     }
                 }
                 else if (areTheyDead(Villain) && Villain->stats.currenthp <= 0 ){
                     queuedMessage = deadAndQuitMessage(1);
-                    enQueue(q, queuedMessage);
+                    callStack(queuedMessage);
                 }
             else {
                 hitMissVar = false; 
                 queuedMessage = hitOrMissMessages(0); 
-                enQueue(q, queuedMessage);
+                callStack(queuedMessage);
                 }
-
-            printOut(queuedMessage);
-            deQueue(q);
     }
 }

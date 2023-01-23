@@ -1,48 +1,5 @@
 #include "defines.h"
 
-// Allocates memory for a new node that temporary holds a node being passed through the call stack.
-    struct QNode* newNode(char *key) {
-        struct QNode* temp = (struct QNode*)malloc(sizeof(struct QNode));
-        temp->key = key; 
-        temp->next = NULL;
-        return temp; 
-}
-
-// Allocates memory for a new node and inserts it to the front of the call stack.
-int enQueue(struct Queue* q, char *key) {
-    // Create a new LL node
-    struct QNode* temp = newNode(key);
-
-    // If queue is empty, then new node is moved to the head,
-    // because it's empty the tail and head are the same.
-    if (q->rear == NULL) {
-        q->front = q->rear = temp;
-        return 1;
-    }
-
-    // otherwise add a new node to the back and point the tail to null.
-    q->rear->next = temp;
-    q->rear = temp;
-    return 1;
-}
-
-// Deallocates memory required for the current node in the call stack.
-void deQueue(struct Queue* q) {
-    // If queue is empty, return NULL.
-    if (q->front == NULL){
-        return; }
-
-    // Store previous front and move front one node ahead
-    struct QNode* temp = q->front;
-
-    q->front = q->front->next;
-
-    // If front becomes NULL, then change rear also as NULL
-    if (q->front == NULL){
-        q->rear = NULL;
-    free(temp); } 
-}
-
 /*==================================================*
 
             Character function declarations.
@@ -154,12 +111,4 @@ void endNCurses() {
 void clearAndMove(int row, int column) {
     clrtoeol();
     move(row, column);
-}
-
-// Function to print strings passed in to it. Potentially need to  
-// integrate Entity* Target arg. so we can display characters names in strings.
-void printOut (char *queuedMessages){
-    char *messageToPrint = queuedMessages;
-        clearAndMove(0, 10);
-        mvprintw(4, 4, "%s\n", messageToPrint);
 }

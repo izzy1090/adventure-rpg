@@ -1,6 +1,6 @@
 #include "defines.h"
-#include "attack.h"
 #include "input.h"
+#include "exploration.h"
 
 /*=====================================================*
 
@@ -16,15 +16,15 @@
 
 *=====================================================*/
 
-stateMachine gameState = Battle;
+stateMachine gameState = Exploration;
 bool stateInitialize = TRUE;
 
 int main (void) {
     beginNCurses();
     refresh();
     while(1){
-        if (gameState == Battle) {
-            initializeBattle();
+        if (gameState == Exploration){
+            movePlayerLoop();
         }
     }
     endNCurses();
