@@ -3,5 +3,6 @@ This project is designed to emulate a text-based RPG combat engine made popular 
 
 Planned Features: 
 1) Need to implement multiple states to switch between so that the game has a real combat flow
-2) Scale experience to include multiple enemies and a walkable area where the player can engage with different enemies
-3) Project may evolve into a visual project to include sprites
+3) Need to implement random encounters so I can start sandboxing gameplay mechanics to see what's fun
+3) Would like to create a matrix to act as a behind the scenes map. This would allow enemies to remain fixed and hidden on the map so that if the player comes within a certain distance, triggers a battle. 
+4) Project may evolve into a visual project to include sprites
