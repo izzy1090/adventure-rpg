@@ -2,6 +2,7 @@
 #define _MESSAGES_H
 
     #include "defines.h"
+    #include "entity.h"
 
     // An empty node to store a queue entry - for message counter
     struct QNode {

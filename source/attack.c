@@ -72,9 +72,7 @@ bool areTheyDead(Entity *Target) {
 // This is temporary and needs to be reorganized according to how we want our
 // state machine switches to flow.
 void initializeBattle(){
-    // Need to figure out where these entities are going to live
-    Entity *Hero = newEntity(WARRIOR, "Jima");
-    Entity *Villain = newEntity(RANGER, "Small Monster");
+    // point to the character entities here
 
     int ch;
     bool hitMissVar;
@@ -83,31 +81,31 @@ void initializeBattle(){
     char *queuedMessage = NULL;
 
     battleMenu();
-    while (ch != 'q'){
-        ch = gameController();
-            hitPercentageFloat = hitCalc(Hero, Villain);
-            hitMissVar = hitMiss(Hero, Villain, hitPercentageFloat);
-            if (hitMissVar) {
-                damageVar = damageCalc(Hero, Villain);
-                damageDealt(Villain, damageVar);
+    // while (ch != 'q'){
+    //     ch = gameController();
+    //         hitPercentageFloat = hitCalc(Hero, Villain);
+    //         hitMissVar = hitMiss(Hero, Villain, hitPercentageFloat);
+    //         if (hitMissVar) {
+    //             damageVar = damageCalc(Hero, Villain);
+    //             damageDealt(Villain, damageVar);
 
-                queuedMessage = hitOrMissMessages(1);
-                callStack(queuedMessage);
-                displayStats(Villain, 1);
-                if (areTheyDead(Villain)) {
-                    queuedMessage = deadMessage(1);
-                    displayStats(Villain, 0);
-                    callStack(queuedMessage); 
-                    }
-                }
-                else if (areTheyDead(Villain) && Villain->stats.currenthp <= 0 ){
-                    queuedMessage = deadAndQuitMessage(1);
-                    callStack(queuedMessage);
-                }
-            else {
-                hitMissVar = false; 
-                queuedMessage = hitOrMissMessages(0); 
-                callStack(queuedMessage);
-                }
-    }
+    //             queuedMessage = hitOrMissMessages(1);
+    //             callStack(queuedMessage);
+    //             displayStats(Villain, 1);
+    //             if (areTheyDead(Villain)) {
+    //                 queuedMessage = deadMessage(1);
+    //                 displayStats(Villain, 0);
+    //                 callStack(queuedMessage); 
+    //                 }
+    //             }
+    //             else if (areTheyDead(Villain) && Villain->stats.currenthp <= 0 ){
+    //                 queuedMessage = deadAndQuitMessage(1);
+    //                 callStack(queuedMessage);
+    //             }
+    //         else {
+    //             hitMissVar = false; 
+    //             queuedMessage = hitOrMissMessages(0); 
+    //             callStack(queuedMessage);
+    //             }
+    // }
 }

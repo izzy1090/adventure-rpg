@@ -5,6 +5,7 @@
         "stdbool.h": "c",
         "defines.h": "c",
         "stdlib.h": "c",
-        "exploration.h": "c"
+        "exploration.h": "c",
+        "entity.h": "c"
     }
 }

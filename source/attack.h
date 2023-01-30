@@ -4,6 +4,7 @@
     #include "defines.h"
     #include "messages.h"
     #include "input.h"
+    #include "entity.h"
 
     
     int system_DiceRoll(int maximum, int minimum, int add_to_roll, int subtract_from_roll);

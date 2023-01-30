@@ -58,6 +58,8 @@ void printOut (char *queuedMessages){
         mvprintw(4, 4, "%s\n", messageToPrint);
 }
 
+// Pass your queued message into the call stack where it will push it to the call stack,
+// print the message, and then deallocate the memory.
 void callStack(char *queuedMessages){
     char* queuedMessage = NULL;
     struct Queue* q = createQueue();

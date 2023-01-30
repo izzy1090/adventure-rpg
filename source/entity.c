@@ -1,4 +1,5 @@
-#include "defines.h"
+#include "entity.h"
+#include "maps.h"
 
 /*==================================================*
 
@@ -6,7 +7,6 @@
 
 *==================================================*/
 
-Entity* newEntity(Entity_Class class, char name[50]);
 void setName(Entity *Target, char name[50]);
 
 // Creates player and sets class to establish what stats they have.
@@ -18,10 +18,10 @@ setName(tempEntity, name);
 // Assign stats based on the given class. 
 switch(class){
     case WARRIOR:
-        tempEntity->stats.currenthp = 60;
-        tempEntity->stats.currentmp = 0;
         tempEntity->stats.max_hp = 100;
-        tempEntity->stats.max_mp = 100;
+        tempEntity->stats.max_mp = 05;
+        tempEntity->stats.currenthp = tempEntity->stats.max_hp;
+        tempEntity->stats.currentmp = tempEntity->stats.max_mp;
         tempEntity->stats.physical_armor = 10;
         tempEntity->stats.magic_armor = 7;
         tempEntity->stats.strength = 15;
@@ -32,10 +32,10 @@ switch(class){
         tempEntity->class = WARRIOR;
         break;
     case RANGER:
-        tempEntity->stats.currenthp = 35;
-        tempEntity->stats.currentmp = 0;
-        tempEntity->stats.max_hp = 100;
-        tempEntity->stats.max_mp = 100;
+        tempEntity->stats.max_hp = 60;
+        tempEntity->stats.max_mp = 30;
+        tempEntity->stats.currenthp = tempEntity->stats.max_hp;
+        tempEntity->stats.currentmp = tempEntity->stats.max_mp;
         tempEntity->stats.physical_armor = 10;
         tempEntity->stats.magic_armor = 8;
         tempEntity->stats.strength = 7;
@@ -45,11 +45,24 @@ switch(class){
         tempEntity->stats.luck = 5;
         tempEntity->class = RANGER;
         break;
-    case MAGE:
-        tempEntity->stats.currenthp = 20;
-        tempEntity->stats.currentmp = 60;
+    case BEAST:
         tempEntity->stats.max_hp = 100;
-        tempEntity->stats.max_mp = 100;
+        tempEntity->stats.max_mp = 0;
+        tempEntity->stats.currenthp = tempEntity->stats.max_hp;
+        tempEntity->stats.currentmp = tempEntity->stats.max_mp;
+        tempEntity->stats.physical_armor = 20;
+        tempEntity->stats.magic_armor = 03;
+        tempEntity->stats.strength = 20;
+        tempEntity->stats.dexterity = 7;
+        tempEntity->stats.wisdom = 2;
+        tempEntity->stats.intelligence = 1;
+        tempEntity->stats.luck = 5;
+        tempEntity->class = BEAST;
+    case MAGE:
+        tempEntity->stats.max_hp = 20;
+        tempEntity->stats.max_mp = 60;
+        tempEntity->stats.currenthp = tempEntity->stats.max_hp;
+        tempEntity->stats.currentmp = tempEntity->stats.max_mp;
         tempEntity->stats.physical_armor = 4;
         tempEntity->stats.magic_armor = 11;
         tempEntity->stats.strength = 3;
@@ -60,10 +73,10 @@ switch(class){
         tempEntity->class = MAGE;
         break;
     case GOD_NERD:
-        tempEntity->stats.currenthp = 100;
-        tempEntity->stats.currentmp = 100;
         tempEntity->stats.max_hp = 100;
         tempEntity->stats.max_mp = 100;
+        tempEntity->stats.currenthp = tempEntity->stats.max_hp;
+        tempEntity->stats.currentmp = tempEntity->stats.max_mp;
         tempEntity->stats.physical_armor = 100;
         tempEntity->stats.magic_armor = 100;
         tempEntity->stats.strength = 100;
@@ -72,12 +85,8 @@ switch(class){
         tempEntity->stats.intelligence = 100;
         tempEntity->stats.luck = 100;
         tempEntity->class = GOD_NERD;
-default:
-        tempEntity->stats.max_hp = 100;
-        tempEntity->stats.max_mp = 100;
-        break;
     }
-    return(tempEntity);     // return memory address of player.
+    return(tempEntity); // return memory address of player.
 }
 
 // setName creates the name for our entity. Currently this function leaks memory   
@@ -88,27 +97,24 @@ void setName(Entity *Target, char name[50]) {
     return; 
 }
 
-/*==================================================*
+// Point the invocated results to a pointer with the pointer name describing a fightable entity.
+Entity* newEntity(Entity_Class class, char name[50]);
 
-        Function declarations required 
-        for the UI.
+void initEntities () {
 
-*==================================================*/
+    Entity *FlyingBanshee = newEntity(BEAST, "Flying Banshee");
+    FlyingBanshee->location = 10;
+    matrix[3][2] = FlyingBanshee->location;
 
-// Begins nCurses mode as well as enables noecho mode and sets seed to 0 for random
-void beginNCurses() {
-    initscr();                   // Start curses mode
-    noecho();
-    srand(time(0));              // Set the seed for rand to 0
-}
+    Entity *LargeGoblin = newEntity(BEAST, "Large Goblin");
+    LargeGoblin->location = 10;
+    matrix[2][3] = LargeGoblin->location;
 
-// Ends nCurses mode
-void endNCurses() {
-    endwin();            // End curses mode 
-}
+    for (int i = 0; i < row; i++){
+        for (int j = 0; j < col; j++){
+            printf("Enemy's location: [%d]", matrix[i][j]);
+        }
+    }
+    
 
-// Clears the window and moves the cursor
-void clearAndMove(int row, int column) {
-    clrtoeol();
-    move(row, column);
 }

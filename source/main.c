@@ -1,6 +1,8 @@
-#include "defines.h"
 #include "input.h"
 #include "exploration.h"
+#include "attack.h"
+#include "entity.h"
+#include "window.h"
 
 /*=====================================================*
 
@@ -24,7 +26,7 @@ int main (void) {
     refresh();
     while(1){
         if (gameState == Exploration){
-            movePlayerLoop();
+            
         }
     }
     endNCurses();
