@@ -1,5 +1,4 @@
 #include "entity.h"
-#include "maps.h"
 
 /*==================================================*
 
@@ -99,22 +98,3 @@ void setName(Entity *Target, char name[50]) {
 
 // Point the invocated results to a pointer with the pointer name describing a fightable entity.
 Entity* newEntity(Entity_Class class, char name[50]);
-
-void initEntities () {
-
-    Entity *FlyingBanshee = newEntity(BEAST, "Flying Banshee");
-    FlyingBanshee->location = 10;
-    matrix[3][2] = FlyingBanshee->location;
-
-    Entity *LargeGoblin = newEntity(BEAST, "Large Goblin");
-    LargeGoblin->location = 10;
-    matrix[2][3] = LargeGoblin->location;
-
-    for (int i = 0; i < row; i++){
-        for (int j = 0; j < col; j++){
-            printf("Enemy's location: [%d]", matrix[i][j]);
-        }
-    }
-    
-
-}

@@ -1,8 +1,9 @@
 #include "input.h"
-#include "exploration.h"
 #include "attack.h"
 #include "entity.h"
 #include "window.h"
+#include "defines.h"
+#include "maps.h"
 
 /*=====================================================*
 
@@ -21,12 +22,23 @@
 stateMachine gameState = Exploration;
 bool stateInitialize = TRUE;
 
+
+
 int main (void) {
+
+    Entity *FlyingBanshee = newEntity(BEAST, "Flying Banshee");
+    Entity *Hero = newEntity(WARRIOR, "Jima");
+    FlyingBanshee->location = 10;
+    matrix[0][2] = FlyingBanshee->location;
+
+    int x;
     beginNCurses();
-    refresh();
-    while(1){
+    
+    while(x != 1){
+        refresh();
         if (gameState == Exploration){
-            
+            mvprintw(10, 10, "Monster's Name: %s", FlyingBanshee->name);
+            mvprintw(11, 10, "Monster location value: [%d]", FlyingBanshee->location);
         }
     }
     endNCurses();
