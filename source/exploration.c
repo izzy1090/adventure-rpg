@@ -1,10 +1,11 @@
 #include "exploration.h"
+#include "defines.h"
 
-void movePlayerLoop() {
+void explorationState() {
     int ch;
     char *queuedMessage = NULL;
-    while (1){
-        ch = gameController();
+    while (gameState == Exploration){
+        ch = input();
         if (ch == KEY_UP){
             queuedMessage = movePlayerMessages(1);
             callStack(queuedMessage);
@@ -17,6 +18,9 @@ void movePlayerLoop() {
         } else if (ch == KEY_LEFT){
             queuedMessage = movePlayerMessages(4);
             callStack(queuedMessage);
-        } 
+        } else if (ch == 'q'){
+            clearAndMove(11, 11);
+            gameState = Battle;
+        }
     }
 }

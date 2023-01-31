@@ -82,7 +82,7 @@ bool areTheyDead(Entity *Target) {
 
 //     battleMenu();
 //     while (ch != 'q'){
-//         ch = gameController();
+//         ch = input();
 //             hitPercentageFloat = hitCalc(player, Villain);
 //             hitMissVar = hitMiss(Hero, Villain, hitPercentageFloat);
 //             if (hitMissVar) {

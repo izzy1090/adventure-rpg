@@ -4,6 +4,7 @@
 #include "window.h"
 #include "defines.h"
 #include "maps.h"
+#include "exploration.h"
 
 /*=====================================================*
 
@@ -19,11 +20,6 @@
 
 *=====================================================*/
 
-stateMachine gameState = Exploration;
-bool stateInitialize = TRUE;
-
-
-
 int main (void) {
 
     Entity *FlyingBanshee = newEntity(BEAST, "Flying Banshee");
@@ -31,15 +27,24 @@ int main (void) {
     FlyingBanshee->location = 10;
     matrix[0][2] = FlyingBanshee->location;
 
-    int x;
+    int ch;
     beginNCurses();
     
-    while(x != 1){
+    while(1){
         refresh();
+
         if (gameState == Exploration){
-            mvprintw(10, 10, "Monster's Name: %s", FlyingBanshee->name);
-            mvprintw(11, 10, "Monster location value: [%d]", FlyingBanshee->location);
+            explorationState();
+            clearAndMove(12, 12);
+            gameState = Battle;
+        } else if (gameState == Battle){
+            clearAndMove(12, 12);
+            mvprintw(10, 10, "You're now in the battle state.");
         }
+        
+            // mvprintw(10, 10, "Monster's Name: %s", FlyingBanshee->name);
+            // mvprintw(11, 10, "Monster location value: [%d]", FlyingBanshee->location);
+        
     }
     endNCurses();
     return 0; 

@@ -5,6 +5,6 @@
     #include "input.h"
     #include "messages.h"
 
-    void movePlayerLoop();
+    void explorationState();
 
 #endif

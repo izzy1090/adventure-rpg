@@ -3,7 +3,7 @@
 // Used to detect input from the keyboard and then return integers 
 // that correspond with keys on a computer keyboard. We can use 
 // those values to then trigger certain actions or states
-int gameController() {
+int input() {
     int change;
     keypad(stdscr, TRUE);   // This allows keypad input
     while((change = getch()) != KEY_ENTER){

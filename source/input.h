@@ -2,6 +2,6 @@
 #define _INPUT_H
 
     #include "defines.h"
-    int gameController();
+    int input();
 
 #endif
