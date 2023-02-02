@@ -1,9 +1,8 @@
+#include "defines.h"
 #include "input.h"
 #include "attack.h"
 #include "entity.h"
 #include "window.h"
-#include "defines.h"
-#include "maps.h"
 #include "exploration.h"
 
 /*=====================================================*
@@ -17,14 +16,6 @@
 *=====================================================*/
 
 int main (void) {
-    // Entity declarations will live somewhere else
-    // the below is temporary for development purposes
-    Entity *FlyingBanshee = newEntity(BEAST, "Flying Banshee");
-    Entity *Hero = newEntity(WARRIOR, "Jima");
-    FlyingBanshee->location = 10;
-    matrix[0][2] = FlyingBanshee->location;
-    matrix[0][0] = Hero->location;
-
     beginNCurses();
     
     while(1){

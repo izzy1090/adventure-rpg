@@ -3,8 +3,9 @@
 
     #include "defines.h"
 
-    int matrix[4][4] = { 
-        {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}
-    };
+    // A 4 x 4 map for players to explore and interact with potential enemies
+    int map[4][4];
+    int row = 0;
+    int col = 0;
 
 #endif
