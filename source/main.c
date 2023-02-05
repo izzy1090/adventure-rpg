@@ -1,6 +1,6 @@
 #include "defines.h"
 #include "input.h"
-#include "attack.h"
+#include "battle.h"
 #include "entity.h"
 #include "window.h"
 #include "exploration.h"
@@ -17,18 +17,13 @@
 
 int main (void) {
     beginNCurses();
-    
-    while(1){
-        refresh();
-
+    while (1){
         if (gameState == Exploration){
-            explorationState();
-            clearAndMove(12, 12);
-            gameState = Battle;
-        } else if (gameState == Battle){
-            clearAndMove(12, 12);
-            mvprintw(10, 10, "You're now in the battle state.");
-        }
+            initializeExploration();
+        } 
+        if (gameState == Battle){
+            initializeBattle();
+        } 
     }
     endNCurses();
     return 0; 

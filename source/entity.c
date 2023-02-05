@@ -57,6 +57,7 @@ switch(class){
         tempEntity->stats.intelligence = 1;
         tempEntity->stats.luck = 5;
         tempEntity->class = BEAST;
+        break;
     case MAGE:
         tempEntity->stats.max_hp = 20;
         tempEntity->stats.max_mp = 60;
@@ -84,17 +85,63 @@ switch(class){
         tempEntity->stats.intelligence = 100;
         tempEntity->stats.luck = 100;
         tempEntity->class = GOD_NERD;
+        break;
     }
     return(tempEntity); // return memory address of player.
 }
 
 // setName creates the name for our entity. Currently this function leaks memory   
-// due to strcpy which is not stable, however when the game transitions over to  
+// due to strcpy which is unstable, however when the game transitions over to  
 // SGDK a different built-in function will be used. 
 void setName(Entity *Target, char name[50]) {
     strcpy(Target->name, name);
     return; 
 }
 
-// Point the invocated results to a pointer with the pointer name describing a fightable entity.
+// Point the invocated results to a pointer with the name of the Entity you want to create
+// Pass in a character class to establish pre-defined stats and a name for the Entity
 Entity* newEntity(Entity_Class class, char name[50]);
+
+/* Use integers to trigger the creation and return of an Entity to play around with on a battlefield.
+This allows us to manipulate data related to location, health, and other integer based stats.
+
+1: Jima, 2: Brock, and 3: Sean The Mage */
+Entity* playerEntities (int trigger){
+    Entity *Jima = newEntity(WARRIOR, "Jima");
+    Entity *Brock = newEntity(RANGER, "Brock");
+    Entity *SeanTheMage = newEntity(MAGE, "Sean The Mage");
+
+    Entity *returnedPlayer = NULL;
+
+    switch(trigger){
+        case 1: 
+            returnedPlayer = Jima;
+        case 2: 
+            returnedPlayer = Brock;
+        case 3: 
+            returnedPlayer = SeanTheMage;
+    }
+    return (returnedPlayer);
+}
+
+/* Use integers to trigger the creation and return of an Entity to play around with on a battlefield.
+This allows us to manipulate data related to location, health, and other integer based stats.
+
+1: Small Monster, 2: Flying Banshee, and 3: Goblin */
+Entity* enemyEntities(int triggerEnemy){
+    Entity *SmallMonster = newEntity(BEAST, "Small Monster");
+    Entity *FlyingBanshee = newEntity(BEAST, "Flying Banshee");
+    Entity *Goblin = newEntity(BEAST, "Goblin");
+
+    Entity *returnedEnemy = NULL;
+    
+    switch (triggerEnemy){
+        case 1: 
+            returnedEnemy = SmallMonster;
+        case 2: 
+            returnedEnemy = FlyingBanshee;
+        case 3: 
+            returnedEnemy = Goblin;
+        }
+        return (returnedEnemy);
+}

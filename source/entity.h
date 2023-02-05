@@ -47,9 +47,7 @@
 
     Entity* newEntity(Entity_Class class, char name[50]);
 
-    typedef struct {
-        Entity *characterNode;
-        Entity *monsterNode;
-    } EntityNodes;
+    Entity* playerEntities (int trigger);
+    Entity* enemyEntities(int triggerEnemy);
 
 #endif

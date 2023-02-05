@@ -6,6 +6,8 @@
         "defines.h": "c",
         "stdlib.h": "c",
         "exploration.h": "c",
-        "entity.h": "c"
+        "entity.h": "c",
+        "input.h": "c",
+        "window.h": "c"
     }
 }

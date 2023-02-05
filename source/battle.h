@@ -10,9 +10,10 @@
     bool hitMiss(Entity *Attacker, Entity *Target, float hitPercentage);
     float hitCalc(Entity *Attacker, Entity *Target);
     int damageCalc(Entity *Attacker, Entity *Target); 
-    int damageDealt(Entity *Target, int damage);
+    int dealDamage(Entity *Target, int damage);
     int criticalHit(Entity *Attacker, Entity *Target);
     bool areTheyDead(Entity *Target);
     int classBonus(Entity *Attacker, Entity *Target, int class);
+    void initializeBattle();
 
 #endif

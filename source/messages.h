@@ -32,6 +32,6 @@
     char* hitOrMissMessages(int trigger);
     char* deadMessage(int trigger);
     char* deadAndQuitMessage(int trigger);
-    char* movePlayerMessages(int trigger); 
+    char* movePlayerMessage(int trigger); 
 
 #endif

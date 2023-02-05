@@ -56,6 +56,7 @@ void printOut (char *queuedMessages){
     char *messageToPrint = queuedMessages;
         clearAndMove(0, 10);
         mvprintw(4, 4, "%s\n", messageToPrint);
+        return;
 }
 
 // Pass your queued message into the call stack where it will push it to the call stack,
@@ -67,6 +68,7 @@ void callStack(char *queuedMessages){
     enQueue(q, queuedMessage);
     printOut(queuedMessage);
     deQueue(q);
+    return;
 }
 
 // when trigger is passed a 1, then show stats
@@ -124,7 +126,7 @@ char* deadAndQuitMessage(int trigger){
 Use the following triggers to trigger your message:
 
 Moving forward= 1, Moving left= 2, Moving backwards= 3, and Moving right= 4 */
-char* movePlayerMessages(int trigger){
+char* movePlayerMessage(int trigger){
     char *moveMessage = "";
     if (trigger == 1){
         moveMessage = "The hero has moved forward.";
