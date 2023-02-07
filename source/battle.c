@@ -69,7 +69,7 @@ bool areTheyDead(Entity *Target) {
 }
 
 void initializeBattle () {
-    Entity *Jima = newEntity(WARRIOR, "Jima");
+    Entity *Jima = playerEntities(1);
     Entity *Villain = enemyEntities(1);
 
     gameState = Battle;

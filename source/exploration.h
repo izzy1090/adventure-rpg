@@ -8,6 +8,5 @@
     #include "maps.h"
 
 void initializeExploration();
-// void enemyPathing();
 
 #endif

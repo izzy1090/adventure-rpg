@@ -44,20 +44,6 @@ switch(class){
         tempEntity->stats.luck = 5;
         tempEntity->class = RANGER;
         break;
-    case BEAST:
-        tempEntity->stats.max_hp = 100;
-        tempEntity->stats.max_mp = 0;
-        tempEntity->stats.currenthp = tempEntity->stats.max_hp;
-        tempEntity->stats.currentmp = tempEntity->stats.max_mp;
-        tempEntity->stats.physical_armor = 20;
-        tempEntity->stats.magic_armor = 03;
-        tempEntity->stats.strength = 20;
-        tempEntity->stats.dexterity = 7;
-        tempEntity->stats.wisdom = 2;
-        tempEntity->stats.intelligence = 1;
-        tempEntity->stats.luck = 5;
-        tempEntity->class = BEAST;
-        break;
     case MAGE:
         tempEntity->stats.max_hp = 20;
         tempEntity->stats.max_mp = 60;
@@ -107,6 +93,7 @@ This allows us to manipulate data related to location, health, and other integer
 
 1: Jima, 2: Brock, and 3: Sean The Mage */
 Entity* playerEntities (int trigger){
+    // You can create templates for new characters here
     Entity *Jima = newEntity(WARRIOR, "Jima");
     Entity *Brock = newEntity(RANGER, "Brock");
     Entity *SeanTheMage = newEntity(MAGE, "Sean The Mage");
@@ -116,10 +103,13 @@ Entity* playerEntities (int trigger){
     switch(trigger){
         case 1: 
             returnedPlayer = Jima;
+            break;
         case 2: 
             returnedPlayer = Brock;
+            break;
         case 3: 
             returnedPlayer = SeanTheMage;
+            break;
     }
     return (returnedPlayer);
 }
@@ -138,10 +128,13 @@ Entity* enemyEntities(int trigger){
     switch (trigger){
         case 1: 
             returnedEnemy = SmallMonster;
+            break;
         case 2: 
             returnedEnemy = FlyingBanshee;
+            break;
         case 3: 
             returnedEnemy = Goblin;
+            break;
         }
     return (returnedEnemy);
 }

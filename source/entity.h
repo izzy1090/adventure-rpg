@@ -30,7 +30,6 @@
         WARRIOR,
         RANGER,
         MAGE,
-        BEAST,
         GOD_NERD,
     } Entity_Class;
 

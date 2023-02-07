@@ -19,8 +19,10 @@ void initializeExploration() {
     // Enemies
     Entity *SmallMonster = enemyEntities(1);
     Entity *FlyingBanshee = enemyEntities(2);
-    SmallMonster->location = map[row][col+=3];
-    FlyingBanshee->location = map[row+=1][col];
+    Entity *Goblin = enemyEntities(3);
+    SmallMonster->location = map[2][1];
+    FlyingBanshee->location = map[3][0];
+    Goblin->location = map[0][3];
     
     int ch;
     char *queuedMessage = NULL;
@@ -30,38 +32,39 @@ void initializeExploration() {
                 queuedMessage = movePlayerMessage(1);
                 Jima->location = map[row++][col];
                 mvprintw(10, 10, "This is Jima's location: %d", Jima->location);
-                SmallMonster->location = map[row][col--];
                 mvprintw(11, 10, "This is the monster's location: %d", SmallMonster->location);
-                FlyingBanshee->location = map[row--][col];
-                mvprintw(12, 10, "This is the monster's location: %d", FlyingBanshee->location);
+                mvprintw(12, 10, "This is the Flying Banshee's location: %d", FlyingBanshee->location);
+                mvprintw(13, 10, "This is the Goblin's location: %d", Goblin->location);
                 callStack(queuedMessage);  
         } 
-        else if (ch == KEY_RIGHT){
+        if (ch == KEY_RIGHT){
                 queuedMessage = movePlayerMessage(2);
                 Jima->location = map[row][col++];
                 mvprintw(10, 10, "This is Jima's location: %d", Jima->location);
-                SmallMonster->location = map[row--][col--];
                 mvprintw(11, 10, "This is the monster's location: %d", SmallMonster->location);
-                mvprintw(12, 10, "This is the monster's location: %d", FlyingBanshee->location);
+                mvprintw(12, 10, "This is the Flying Banshee's location: %d", FlyingBanshee->location);
+                mvprintw(13, 10, "This is the Goblin's location: %d", Goblin->location);
                 callStack(queuedMessage);
         } 
-        else if (ch == KEY_DOWN){
+        if (ch == KEY_DOWN){
             queuedMessage = movePlayerMessage(3);
             Jima->location = map[row--][col];
             mvprintw(10, 10, "This is Jima's location: %d", Jima->location);
-            SmallMonster->location = map[row++][col--];
             mvprintw(11, 10, "This is the monster's location: %d", SmallMonster->location);
+            mvprintw(12, 10, "This is the Flying Banshee's location: %d", FlyingBanshee->location);
+            mvprintw(13, 10, "This is the Goblin's location: %d", Goblin->location);
             callStack(queuedMessage);
         } 
-        else if (ch == KEY_LEFT){
+        if (ch == KEY_LEFT){
             queuedMessage = movePlayerMessage(4);
             Jima->location = map[row][col--];
             mvprintw(10, 10, "This is Jima's location: %d", Jima->location);
-            SmallMonster->location = map[row++][col++];
             mvprintw(11, 10, "This is the monster's location: %d", SmallMonster->location);
+            mvprintw(12, 10, "This is the Flying Banshee's location: %d", FlyingBanshee->location);
+            mvprintw(13, 10, "This is the Goblin's location: %d", Goblin->location);
             callStack(queuedMessage);
         } 
-        else if (ch == 'q'){
+        if (FlyingBanshee->location == Jima->location || SmallMonster->location == Jima->location || Jima->location == Goblin->location){
             gameState = Battle;
         }
     }
