@@ -111,7 +111,7 @@ Entity* playerEntities (int trigger){
     Entity *Brock = newEntity(RANGER, "Brock");
     Entity *SeanTheMage = newEntity(MAGE, "Sean The Mage");
 
-    Entity *returnedPlayer = NULL;
+    Entity *returnedPlayer = malloc(sizeof(Entity));
 
     switch(trigger){
         case 1: 
@@ -128,14 +128,14 @@ Entity* playerEntities (int trigger){
 This allows us to manipulate data related to location, health, and other integer based stats.
 
 1: Small Monster, 2: Flying Banshee, and 3: Goblin */
-Entity* enemyEntities(int triggerEnemy){
-    Entity *SmallMonster = newEntity(BEAST, "Small Monster");
-    Entity *FlyingBanshee = newEntity(BEAST, "Flying Banshee");
-    Entity *Goblin = newEntity(BEAST, "Goblin");
+Entity* enemyEntities(int trigger){
+    Entity *SmallMonster = newEntity(RANGER, "Small Monster");
+    Entity *FlyingBanshee = newEntity(RANGER, "Flying Banshee");
+    Entity *Goblin = newEntity(RANGER, "Goblin");
 
-    Entity *returnedEnemy = NULL;
+    Entity *returnedEnemy = malloc(sizeof(Entity));
     
-    switch (triggerEnemy){
+    switch (trigger){
         case 1: 
             returnedEnemy = SmallMonster;
         case 2: 
@@ -143,5 +143,5 @@ Entity* enemyEntities(int triggerEnemy){
         case 3: 
             returnedEnemy = Goblin;
         }
-        return (returnedEnemy);
+    return (returnedEnemy);
 }

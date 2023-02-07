@@ -48,6 +48,6 @@
     Entity* newEntity(Entity_Class class, char name[50]);
 
     Entity* playerEntities (int trigger);
-    Entity* enemyEntities(int triggerEnemy);
+    Entity* enemyEntities(int trigger);
 
 #endif

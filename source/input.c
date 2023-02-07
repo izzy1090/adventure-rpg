@@ -28,8 +28,6 @@ int input() {
                 return (change);
             case 101: //e
                 return (change);
-            default:
-                break;
         }
     } 
     return (change); 

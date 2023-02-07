@@ -40,12 +40,12 @@ int damageCalc(Entity *Attacker, Entity *Target) {
 }
 
 // Function to calculate how much damage is dealt
-int dealDamage(Entity *Target, int damage) {
+int damageDealt(Entity *Target, int damage) {
     Target->stats.currenthp = Target->stats.currenthp - damage;
     return Target->stats.currenthp;
 }
 
-// Function to declare the class bonus - currently not in use, need to figure out how to implement this!
+// Function to declare the class bonus
 int classBonus (Entity *Attacker, Entity *Target, int class ) {
     int classDamage;
     if (class == WARRIOR ){
@@ -68,47 +68,42 @@ bool areTheyDead(Entity *Target) {
     } return deadStatus; 
 }
 
-// This is the current game loop that's invoked when the battle state is active. 
-// This is temporary and needs to be reorganized according to how we want our
-// state machine switches to flow.
-void initializeBattle(){
-    Entity *Hero = newEntity(WARRIOR, "Jima");
-    Entity *Villain = newEntity(RANGER, "Small Monster");
+void initializeBattle () {
+    Entity *Jima = newEntity(WARRIOR, "Jima");
+    Entity *Villain = enemyEntities(1);
+
+    gameState = Battle;
 
     int ch;
-
-    bool hitSuccess = false;
+    bool hitSuccess;
     int damageAmount;
     float hitPercentageFloat; 
     char *queuedMessage = NULL;
 
     battleMenu();
-    refresh();
-    // prompts player to press 'q' to quit the program
-    while ( ch != 'q'){            
+    while ( gameState == Battle){            
         ch = input();
-        hitPercentageFloat = hitCalc(Hero, Villain);
-        hitSuccess = hitMiss(Hero, Villain, hitPercentageFloat);
+        hitPercentageFloat = hitCalc(Jima, Villain);
+        hitSuccess = hitMiss(Jima, Villain, hitPercentageFloat);
         if (hitSuccess) {
-            damageAmount = damageCalc(Hero, Villain);
-            dealDamage(Villain, damageAmount);
+            damageAmount = damageCalc(Jima, Villain);
+            damageDealt(Villain, damageAmount);
             queuedMessage = hitOrMissMessages(1);
             callStack(queuedMessage);
             displayStats(Villain, 1);
             if (areTheyDead(Villain)) {
                 queuedMessage = deadMessage(1);
                 displayStats(Villain, 0);
-                callStack(queuedMessage);
+                callStack(queuedMessage); 
                 }
             }
             else if (areTheyDead(Villain) && Villain->stats.currenthp <= 0 ){
-                queuedMessage = deadAndQuitMessage(1);
-                callStack(queuedMessage);
+                gameState = Exploration;
             }
         else {
             hitSuccess = false; 
             queuedMessage = hitOrMissMessages(0); 
             callStack(queuedMessage);
-        }
+            }
     }
 }

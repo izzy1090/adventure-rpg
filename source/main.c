@@ -15,15 +15,15 @@
 
 *=====================================================*/
 
-int main (void) {
+bool gameStateInitialize = TRUE;
+
+int main (void) {   
     beginNCurses();
-    while (1){
-        if (gameState == Exploration){
-            initializeExploration();
-        } 
-        if (gameState == Battle){
-            initializeBattle();
-        } 
+    refresh();
+    while (gameStateInitialize){
+        initializeExploration();
+        initializeBattle();
+        gameStateInitialize = false; 
     }
     endNCurses();
     return 0; 

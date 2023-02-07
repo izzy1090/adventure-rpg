@@ -113,15 +113,6 @@ char* deadMessage(int trigger) {
     } return dead;
 }
 
-// function to display message that the villain is dead and it's time to quit the program
-char* deadAndQuitMessage(int trigger){
-    char *timeToQuit = "";
-    if (trigger == 1){
-        timeToQuit = "Okay, they're dead! Stop beating a dead horse and press 'q' to quit please!";
-        return timeToQuit;
-    } return timeToQuit;
-}
-
 /* Displays a message after the user moves the hero forward, backward, left or right. 
 Use the following triggers to trigger your message:
 

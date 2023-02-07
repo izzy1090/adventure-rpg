@@ -399,7 +399,7 @@ void deQueue(struct Queue* q) {
 // gameController function, much of the code below is tentative.
 int gameController() {
     int ch;
-    keypad(stdscr, TRUE);        // This allows keypad input
+    keypad(stdscr, TRUE); // This allows keypad input
     while((ch = getch()) != KEY_ENTER){
         switch(ch){   
             case KEY_LEFT:
