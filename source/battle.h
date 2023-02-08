@@ -16,6 +16,6 @@
     int criticalHit(Entity *Attacker, Entity *Target);
     bool areTheyDead(Entity *Target);
     void displayStats(Entity *Target, int trigger);
-    void initializeBattle();
+    stateMachine initBattle (stateMachine currentState);
     
 #endif

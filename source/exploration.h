@@ -7,6 +7,6 @@
     #include "messages.h"
     #include "maps.h"
 
-void initializeExploration();
+    stateMachine initExploration();
 
 #endif

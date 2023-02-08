@@ -68,11 +68,9 @@ bool areTheyDead(Entity *Target) {
     } return deadStatus; 
 }
 
-void initializeBattle () {
+stateMachine initBattle (stateMachine currentState) {
     Entity *Jima = playerEntities(1);
     Entity *Villain = enemyEntities(1);
-
-    gameState = Battle;
 
     int ch;
     bool hitSuccess;
@@ -81,7 +79,7 @@ void initializeBattle () {
     char *queuedMessage = NULL;
 
     battleMenu();
-    while ( gameState == Battle){            
+    while ( currentState == Battle){            
         ch = input();
         hitPercentageFloat = hitCalc(Jima, Villain);
         hitSuccess = hitMiss(Jima, Villain, hitPercentageFloat);
@@ -91,19 +89,18 @@ void initializeBattle () {
             queuedMessage = hitOrMissMessages(1);
             callStack(queuedMessage);
             displayStats(Villain, 1);
-            if (areTheyDead(Villain)) {
-                queuedMessage = deadMessage(1);
-                displayStats(Villain, 0);
-                callStack(queuedMessage); 
-                }
-            }
-            else if (areTheyDead(Villain) && Villain->stats.currenthp <= 0 ){
-                gameState = Exploration;
-            }
+        }
+        else if (areTheyDead(Villain)){
+            queuedMessage = deadMessage(1);
+            displayStats(Villain, 0);
+            callStack(queuedMessage); 
+            currentState = GameOver;
+        }
         else {
             hitSuccess = false; 
             queuedMessage = hitOrMissMessages(0); 
             callStack(queuedMessage);
             }
     }
+    return currentState;
 }

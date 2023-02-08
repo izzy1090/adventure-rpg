@@ -15,7 +15,8 @@
 
     // Papa state machine: where all the big state machine containers live!
     typedef enum { Exploration, Battle, Attack, GameOver } stateMachine;
-    stateMachine gameState;
+    stateMachine initialGameState;
+    stateMachine nextState;
 
     typedef enum { Exploration_MovePlayer, Exploration_EnemyPatrol } stateMachine_Exploration;
     typedef enum { MovePlayer_Forward, MovePlayer_Left, MovePlayer_Right, MovePlayer_Down } stateMachine_Exploration_MovePlayer;

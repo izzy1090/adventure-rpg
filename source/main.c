@@ -5,17 +5,6 @@
 #include "window.h"
 #include "exploration.h"
 
-/*=====================================================*
-    
-    To compile for use with unix use 
-    "gcc -c file.c -o file.o" to generate output 
-    files as 'file.o'. You can then bundle together all
-    the 'file.o' along with the -ncurses flag to 
-    compile.
-
-*=====================================================*/
-
-stateMachine gameState = Exploration;
 // stateMachine_Exploration explorationState = Exploration_LoadLevel;
 // stateMachine_Exploration_Menu explorationMenuState = Exploration_Menu_Main;
 // stateMachine_Exploration_Menu_Items explorationMenuItemsState = Exploration_Menu_Items_Main;
@@ -29,20 +18,34 @@ stateMachine gameState = Exploration;
 // stateMachine_GameOver_Lose gameOverLoseState = Gameover_Lose_Animation;
 // stateMachine_MainMenu mainMenuState = MainMenu_Display;
 
+/*=====================================================*
+    
+    To compile for use with unix use 
+    "gcc -c file.c -o file.o" to generate output 
+    files as 'file.o'. You can then bundle together all
+    the 'file.o' along with the -ncurses flag to 
+    compile.
 
+*=====================================================*/
+
+stateMachine initialGameState = Exploration;
 bool gameStateInitialize = TRUE;
 
 int main (void) {   
     beginNCurses();
     refresh();
     while (gameStateInitialize){
-        if (gameState == Exploration){
-            initializeExploration();
+        if (initialGameState == Exploration){
+            nextState = initExploration(initialGameState);
         } 
-        if (gameState == Battle){
-            initializeBattle();
+        if (nextState == Battle){
+            nextState = initBattle(nextState);
         }
-        gameStateInitialize = false; 
+        if (nextState == GameOver) {
+            refresh();
+            mvprintw(10, 10, "You're now in the game over state!");
+        }
+        // gameStateInitialize = false; 
     }
     endNCurses();
     return 0; 

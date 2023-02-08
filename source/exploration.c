@@ -10,9 +10,7 @@ int map[4][4] = {
 int row = 0;
 int col = 0;
 
-void initializeExploration() {
-    gameState = Exploration;
-
+stateMachine initExploration(stateMachine currentState) {
     Entity *Jima = playerEntities(1);
     Jima->location = map[row][col];
 
@@ -26,7 +24,7 @@ void initializeExploration() {
     
     int ch;
     char *queuedMessage = NULL;
-    while (gameState == Exploration){
+    while (currentState == Exploration){
         ch = input();
         if (ch == KEY_UP){
                 queuedMessage = movePlayerMessage(1);
@@ -65,7 +63,8 @@ void initializeExploration() {
             callStack(queuedMessage);
         } 
         if (FlyingBanshee->location == Jima->location || SmallMonster->location == Jima->location || Jima->location == Goblin->location){
-            gameState = Battle;
+            currentState = Battle;
         }
     }
+    return currentState;
 }
