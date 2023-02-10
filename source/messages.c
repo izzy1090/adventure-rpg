@@ -60,7 +60,7 @@ void printOut (char *queuedMessages){
 }
 
 // Pass your queued message into the call stack where it will push it to the call stack,
-// print the message, and then deallocate the memory.
+// print the message, and then deallocate the memory. 
 void callStack(char *queuedMessages){
     char* queuedMessage = NULL;
     struct Queue* q = createQueue();
