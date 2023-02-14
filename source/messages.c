@@ -123,13 +123,13 @@ char* movePlayerMessage(int trigger){
         moveMessage = "The hero has moved forward.";
         return moveMessage;
     } else if (trigger == 2){
-        moveMessage = "The hero has moved to the right.";
+        moveMessage = "The hero has moved to the left.";
         return moveMessage;
     } else if (trigger == 3) {
         moveMessage = "The hero has moved backwards.";
         return moveMessage;
     } else if (trigger == 4) {
-        moveMessage = "The hero has moved to the left.";
+        moveMessage = "The hero has moved to the right.";
         return moveMessage;
     } return moveMessage;
 }

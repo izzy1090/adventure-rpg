@@ -1,56 +1,112 @@
 #include "exploration.h"
 
-int map[4][4] = { 
-    {0, 1, 2, 3}, 
-    {10, 11, 12, 13}, 
-    {20, 21, 22, 23}, 
-    {30, 31, 32, 33}
+int map[5][5] = { 
+    {1, 2, 3, 4, 5}, 
+    {10, 11, 12, 13, 14}, 
+    {20, 21, 22, 23, 24}, 
+    {30, 31, 32, 33, 34},
+    {40, 41, 42, 43, 44}
 };
 
-int row = 0;
-int col = 0;
+Entity_Location playerEntity_Location = {.xPos = 0, .yPos = 0, .xMove = 1, .yMove = 1};
 
-/* Checks to see if the enemy and hero location passed-in are in the vicinity of each other. 
-If they are, then return true, otherwise return false. */
-bool enemyCheck(int heroLocation){
-    Entity *SmallMonster = enemyEntities(1);
-    SmallMonster->location = map[2][1];
-    Entity *FlyingBanshee = enemyEntities(2);
-    FlyingBanshee->location = map[3][0];
-    Entity *Goblin = enemyEntities(3);
-    Goblin->location = map[0][3];
+// we can find the max_width of a matrix by finding the sizeof a single column of elements
+// and divide it to by the sizeof a single element to get an understanding of how many elements it will take 
+// to fill up an entire column of elements.
+int max_width = sizeof(map[0]) / sizeof(map[0][0]);
+// similar to the above, max_height finds the sizeof the entire 2 dimensional array, 
+// and divides it by the sizeof an entire row to find how many rows are present in the entire array 
+int max_height = sizeof(map) / sizeof(map[0]);
 
-    if (heroLocation == SmallMonster->location || heroLocation == FlyingBanshee->location || heroLocation == Goblin->location){
-        return true;
-    } else return false;
+// void goblinMovement(){
+//     Entity *Goblin = enemyEntities(3);
+//     Goblin->Entity_Location = map[3][2];
+//     enemyPos = Goblin->Entity_Location;
 
+//     Entity *Monster = enemyEntities(1);
+//     Monster->location = enemyEntity_location.xPos + enemyEntity_location.yPos;
+
+//     bool enemyFound = Jima->location == Monster->location;
+//     if (enemyFound){
+//         mvprintw(15, 10, "here!");
+//     }
+
+//     if (enemyPos == map[3][2]){
+//        enemyPos = map[enemyCol][enemyRow--]; 
+       
+//     } else if (enemyPos == map[2][2]){
+//         enemyPos = map[enemyRow][enemyCol++];
+        
+//     } else if (enemyPos == map[2][3]){
+//         enemyPos = map[enemyRow++][enemyCol];
+        
+//     } else if (enemyPos == map[3][3]){
+//         enemyPos = map[enemyRow][enemyCol--];
+//     } else if (enemyPos == 0) {
+//         enemyPos = map[3][2];
+//     }
+// }
+
+void checkMapBounds(){
+    bool lowerMapBound = (playerEntity_Location.xPos + playerEntity_Location.xMove) < 0;
+    bool upperMapBound = (playerEntity_Location.xPos + playerEntity_Location.xMove) >= max_width;
+    bool leftMapBound = (playerEntity_Location.yPos + playerEntity_Location.yMove) < 0;
+    bool rightMapBound = (playerEntity_Location.yPos + playerEntity_Location.yMove) >= max_height;
+    
+    if (upperMapBound) {        
+        playerEntity_Location.xPos += -playerEntity_Location.xMove;
+    } else if (lowerMapBound){
+        playerEntity_Location.xPos += playerEntity_Location.xMove;
+    } else if (leftMapBound){
+        playerEntity_Location.yPos += playerEntity_Location.yMove;
+    } else if (rightMapBound) {
+        playerEntity_Location.yPos += -playerEntity_Location.yMove;
+    } 
+}
+
+/* Checks to see if the enemy and hero location match, if they do, 
+return the battle state. */
+stateMachine enemyCheck(int heroLocation){
+    Entity_Location monsterEntity_location = {.xPos = 3, .yPos = 2, .xMove = 1, .yMove = 1};
+    Entity *Monster = enemyEntities(1);
+    Monster->location = monsterEntity_location.xPos + monsterEntity_location.yPos;
+
+    Entity_Location flyingBansheeEntity_location = {.xPos = 3, .yPos = 3, .xMove = 1, .yMove = 1};
+    Entity *FlyingBanshee = enemyEntities(1);
+    FlyingBanshee->location = flyingBansheeEntity_location.xPos + flyingBansheeEntity_location.yPos;
+
+    if (heroLocation == Monster->location){
+        return Battle;
+    } else if (heroLocation == FlyingBanshee->location){
+        return Battle;
+    }
+    return Exploration;
 }
 
 /* Moves the player in the direction according to the passed-in state. movePlayer also 
 checks if an enemy or world event is present. If either are, then a new state is returned. */
 stateMachine movePlayer(stateMachine_Exploration_MovePlayer currentState){
     Entity *Jima = playerEntities(1);
-    Jima->location = map[0][0];
+    Jima->location = playerEntity_Location.xPos + playerEntity_Location.yPos;
 
-    bool enemyPresent = FALSE;
-
+    checkMapBounds();
+    
     if (currentState == MovePlayer_Forward){
-        Jima->location = map[row++][col];
-    } 
-    else if (currentState == MovePlayer_Left){
-        Jima->location = map[row][col--];
-    } 
-    else if (currentState == MovePlayer_Down){
-        Jima->location = map[row--][col];
-    } 
-    else if (currentState == MovePlayer_Right){
-        Jima->location = map[row][col++];
-    } 
-    // proves that the states are switching and the hero's location is changing
-    mvprintw(10, 10, "%d", Jima->location);
-    enemyPresent = enemyCheck(Jima->location);
-    if (enemyPresent) {
-        nextState = Battle;
+        mvprintw(13, 10, "Player location: [%d][%d]", playerEntity_Location.xPos, playerEntity_Location.yPos);
+        nextState = enemyCheck(Jima->location);
+        playerEntity_Location.xPos += playerEntity_Location.xMove;
+    } if (currentState == MovePlayer_Right){
+        mvprintw(13, 10, "Player location: [%d][%d]", playerEntity_Location.xPos, playerEntity_Location.yPos);
+        nextState = enemyCheck(Jima->location);
+        playerEntity_Location.yPos += playerEntity_Location.yMove;
+    } if (currentState == MovePlayer_Down){
+        mvprintw(13, 10, "Player location: [%d][%d]", playerEntity_Location.xPos, playerEntity_Location.yPos);
+        nextState = enemyCheck(Jima->location);
+        playerEntity_Location.xPos += -playerEntity_Location.xMove;
+    } if (currentState == MovePlayer_Left){
+        mvprintw(13, 10, "Player location: [%d][%d]", playerEntity_Location.xPos, playerEntity_Location.yPos);
+        nextState = enemyCheck(Jima->location);
+        playerEntity_Location.yPos += -playerEntity_Location.yMove;
     } 
     return nextState;
 }
@@ -69,15 +125,17 @@ stateMachine initExploration(stateMachine currentState) {
             callStack(queuedMessage);
             currentState = movePlayer(MovePlayer_Forward);
         } 
-        else if (ch == KEY_LEFT){
+        if (ch == KEY_LEFT){
             queuedMessage = movePlayerMessage(2);
             callStack(queuedMessage);
             currentState = movePlayer(MovePlayer_Left);
-        } else if (ch == KEY_DOWN){
+        } 
+        if (ch == KEY_DOWN){
             queuedMessage = movePlayerMessage(3);
             callStack(queuedMessage);
             currentState = movePlayer(MovePlayer_Down);
-        } else if (ch == KEY_RIGHT){
+        } 
+        if (ch == KEY_RIGHT){
             queuedMessage = movePlayerMessage(4);
             callStack(queuedMessage);
             currentState = movePlayer(MovePlayer_Right);

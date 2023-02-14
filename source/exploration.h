@@ -7,7 +7,8 @@
     #include "messages.h"
     #include "maps.h"
 
-    bool enemyCheck(int heroLocation);
+    void checkMapBounds();
+    stateMachine enemyCheck(int heroLocation);
     stateMachine movePlayer(stateMachine_Exploration_MovePlayer currentState);
     stateMachine initExploration(stateMachine currentState);
     

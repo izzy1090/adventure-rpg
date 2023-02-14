@@ -45,17 +45,17 @@ int damageDealt(Entity *Target, int damage) {
     return Target->stats.currenthp;
 }
 
-// Function to declare the class bonus
-int classBonus (Entity *Attacker, Entity *Target, int class ) {
-    int classDamage;
-    if (class == WARRIOR ){
-        classDamage = 5; }
-    else if (class == RANGER){
-        classDamage = 3; }
-    else if (class == MAGE){
-        classDamage = 3; }
-    return classDamage; 
-}
+// // Function to declare the class bonus
+// int classBonus (Entity *Attacker, Entity *Target, int class ) {
+//     int classDamage;
+//     if (class == WARRIOR ){
+//         classDamage = 5; }
+//     else if (class == RANGER){
+//         classDamage = 3; }
+//     else if (class == MAGE){
+//         classDamage = 3; }
+//     return classDamage; 
+// }
 
 // Function to test if the target (character being attacked) is dead or not
 // returns a bool to determine death
