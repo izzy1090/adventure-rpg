@@ -36,9 +36,8 @@
     typedef struct {
         int xPos;
         int yPos;
-        int xMove;
-        int yMove;
-    } Entity_Location;
+        int move;
+    } Entity_Loc;
 
     // struct for creating new character stats
     typedef struct {

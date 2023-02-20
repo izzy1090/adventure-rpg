@@ -9,8 +9,7 @@
 
     void checkMapBounds_Player();
     void checkMapBounds_Enemy();
-    void smallMonsterPath();
-    int enemyLocation (char enemyName);
+    void enemyPath();
     stateMachine enemyCheck(int heroLocation);
     stateMachine movePlayer(stateMachine_Exploration_MovePlayer currentState);
     stateMachine initExploration(stateMachine currentState);

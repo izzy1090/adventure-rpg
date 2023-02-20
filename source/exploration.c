@@ -8,119 +8,74 @@ int map[5][5] = {
     {40, 41, 42, 43, 44}
 };
 
-// Player and party locations
-Entity_Location JimaLocation = {.xPos = 0, .yPos = 0, .xMove = 1, .yMove = 1};
+/* Player and party locations to start. This starts off as static locations for a singular map. 
+This will need to scale as the project scales. */
+Entity_Loc JimaLoc = {.xPos = 0, .yPos = 0, .move = 1};
 
 // Enemies on the map locations - we might want to consider giving certain enemy types the ability to move multiple squares
-Entity_Location SmallMonsterLocation = {.xPos = 3, .yPos = 2, .xMove = 1, .yMove = 1};
-Entity_Location FlyingBansheeLocation = {.xPos = 3, .yPos = 3, .xMove = 1, .yMove = 1};
-Entity_Location GoblinLocation = {.xPos = 4, .yPos = 0, .xMove = 1, .yMove = 1};
+Entity_Loc SmallMonsterLoc = {.xPos = 3, .yPos = 2, .move = 1};
 
-// we can find the max_width of a matrix by finding the sizeof a single column of elements
-// and divide it to by the sizeof a single element to get an understanding of how many elements it will take 
-// to fill up an entire column of elements.
-int max_width = sizeof(map[0]) / sizeof(map[0][0]);
-// similar to the above, max_height finds the sizeof the entire 2 dimensional array, 
-// and divides it by the sizeof an entire row to find how many rows are present in the entire array 
-int max_height = sizeof(map) / sizeof(map[0]);
+/* We can find the maxWidth of a matrix by finding the sizeof a single column of elements
+and divide it to by the sizeof a single element to get an understanding of how many elements it will take 
+to fill up an entire column of elements. */
+int maxWidth = sizeof(map[0]) / sizeof(map[0][0]);
+/* Similar to the above, maxHeight finds the sizeof the entire 2 dimensional array, 
+and divides it by the sizeof an entire row to find how many rows are present in the entire array. */
+int maxHeight = sizeof(map) / sizeof(map[0]);
 
+/* This checks the player's location to see if it ever exceeds the boundaries of the current map. 
+The function can easily scale later on to include multiple maps. */
 void checkMapBounds_Player(){
-    bool lowerMapBound = (JimaLocation.xPos + JimaLocation.xMove) < 0;
-    bool upperMapBound = (JimaLocation.xPos + JimaLocation.xMove) >= max_width;
-    bool leftMapBound = (JimaLocation.yPos + JimaLocation.yMove) < 0;
-    bool rightMapBound = (JimaLocation.yPos + JimaLocation.yMove) >= max_height;
+    bool lowerMapBound = (JimaLoc.xPos + JimaLoc.move) < 0;
+    bool upperMapBound = (JimaLoc.xPos + JimaLoc.move) >= maxWidth;
+    bool leftMapBound = (JimaLoc.yPos + JimaLoc.move) < 0;
+    bool rightMapBound = (JimaLoc.yPos + JimaLoc.move) >= maxHeight;
     
     if (upperMapBound) {        
-        JimaLocation.xPos += -JimaLocation.xMove;
+        JimaLoc.xPos += -JimaLoc.move;
     } else if (lowerMapBound){
-        JimaLocation.xPos += JimaLocation.xMove;
+        JimaLoc.xPos += JimaLoc.move;
     } else if (leftMapBound){
-        JimaLocation.yPos += JimaLocation.yMove;
+        JimaLoc.yPos += JimaLoc.move;
     } else if (rightMapBound) {
-        JimaLocation.yPos += -JimaLocation.yMove;
+        JimaLoc.yPos += -JimaLoc.move;
     } 
 }
 
-// void checkMapBounds_Enemy(){
-//     bool lowerMapBound = ((SmallMonsterLocation.xPos + SmallMonsterLocation.xMove) < 0) 
-//     || ((FlyingBansheeLocation.xPos + FlyingBansheeLocation.xMove) < 0)
-//     || ((GoblinLocation.xPos + GoblinLocation.xMove) < 0);
-
-//     bool upperMapBound = ((SmallMonsterLocation.xPos + SmallMonsterLocation.xMove) >= max_width)
-//     || ((FlyingBansheeLocation.xPos + FlyingBansheeLocation.xMove) >= max_width)
-//     || ((GoblinLocation.xPos + GoblinLocation.xMove) >= max_width);
-
-//     bool leftMapBound = ((SmallMonsterLocation.yPos + SmallMonsterLocation.yMove) < 0)
-//     || ((FlyingBansheeLocation.yPos + FlyingBansheeLocation.yMove) < 0)
-//     || ((GoblinLocation.yPos + GoblinLocation.yMove) < 0);
-
-//     bool rightMapBound = ((SmallMonsterLocation.yPos + SmallMonsterLocation.yMove) >= max_height)
-//     || ((FlyingBansheeLocation.yPos + FlyingBansheeLocation.yMove) >= max_height)
-//     || ((GoblinLocation.yPos + GoblinLocation.yMove) >= max_height);
-
-//     if (upperMapBound) {        
-//         JimaLocation.xPos += -JimaLocation.xMove;
-//     } else if (lowerMapBound){
-//         JimaLocation.xPos += JimaLocation.xMove;
-//     } else if (leftMapBound){
-//         JimaLocation.yPos += JimaLocation.yMove;
-//     } else if (rightMapBound) {
-//         JimaLocation.yPos += -JimaLocation.yMove;
-//     } 
-// }
-
-void smallMonsterPath(){
-    Entity_Location currentEnemyLoc = {.xPos = 3, .yPos = 2, .xMove = 1, .yMove = 1};
-    bool initial = currentEnemyLoc.xPos == SmallMonsterLocation.xPos && currentEnemyLoc.yPos == SmallMonsterLocation.yPos;
-    bool firstMove = currentEnemyLoc.xPos + 1 == SmallMonsterLocation.xPos && currentEnemyLoc.yPos == SmallMonsterLocation.yPos;
-    bool secondMove = currentEnemyLoc.xPos + 1 == SmallMonsterLocation.xPos && currentEnemyLoc.yPos + 1 == SmallMonsterLocation.yPos;
+/* This is currently a temporary way to handle the enemy path for a single enemy. When you invoke the function, 
+it creates a static variable a single reference point on the map which is then used to check against one 
+monster's location (the SmallMonster) to see where they are and move them around. This needs to scale to include 
+different enemies and to rely on the initial enemy location, rather than the need to create a state location 
+for each enemy on the map. */
+void enemyPath(){
+    Entity_Loc currentEnemyLoc = {.xPos = 3, .yPos = 2, .move = 1};
+    bool initial = currentEnemyLoc.xPos == SmallMonsterLoc.xPos && currentEnemyLoc.yPos == SmallMonsterLoc.yPos;
+    bool firstMove = currentEnemyLoc.xPos + 1 == SmallMonsterLoc.xPos && currentEnemyLoc.yPos == SmallMonsterLoc.yPos;
+    bool secondMove = currentEnemyLoc.xPos + 1 == SmallMonsterLoc.xPos && currentEnemyLoc.yPos + 1 == SmallMonsterLoc.yPos;
     bool completeLoop = TRUE;
 
     if (initial){   
-        currentEnemyLoc.xPos += currentEnemyLoc.xMove;
+        currentEnemyLoc.xPos += currentEnemyLoc.move;
     } else if (firstMove){
-        currentEnemyLoc.yPos += currentEnemyLoc.yMove;   
+        currentEnemyLoc.yPos += currentEnemyLoc.move;   
     } else if (secondMove){
-        currentEnemyLoc.yPos += -currentEnemyLoc.yMove;
+        currentEnemyLoc.yPos += -currentEnemyLoc.move;
     } else if (firstMove && completeLoop){
-        currentEnemyLoc.xMove += -currentEnemyLoc.xMove;
+        currentEnemyLoc.move += -currentEnemyLoc.move;
     }
-    SmallMonsterLocation.xPos = currentEnemyLoc.xPos;
-    SmallMonsterLocation.yPos = currentEnemyLoc.yPos;
+    SmallMonsterLoc.xPos = currentEnemyLoc.xPos;
+    SmallMonsterLoc.yPos = currentEnemyLoc.yPos;
 }
-
-// // simple utility function to return back the enemies location as an integer
-// int enemyLocation (char enemyName){
-//     Entity *SmallMonster = enemyEntities(1);
-//     Entity *FlyingBanshee = enemyEntities(2);
-//     Entity *Goblin = enemyEntities(3);
-
-//     if (enemyName == SmallMonster->name){
-//         return SmallMonster->location;
-//     } else if (enemyName == FlyingBanshee->name){
-//         return FlyingBanshee->location;
-//     } else if (enemyName == Goblin->location){
-//         return Goblin->location;
-//     }
-// }
 
 /* Checks to see if the enemy and hero location match, if they do, 
 return the battle state. */
 stateMachine enemyCheck(int heroLocation){
     Entity *SmallMonster = enemyEntities(1);
-    SmallMonster->location = SmallMonsterLocation.xPos + SmallMonsterLocation.yPos;
-    // Entity *FlyingBanshee = enemyEntities(2);
-    // FlyingBanshee->location = FlyingBansheeLocation.xPos + FlyingBansheeLocation.yPos;
-    // Entity *Goblin = enemyEntities(3);
-    // Goblin->location = GoblinLocation.xPos + GoblinLocation.yPos;
+    SmallMonster->location = SmallMonsterLoc.xPos + SmallMonsterLoc.yPos;
+
     if (heroLocation == SmallMonster->location){
         return Battle;
     } 
-    // else if (heroLocation == FlyingBanshee->location){
-    //     return Battle;
-    // } else if (heroLocation == Goblin->location){
-    //     return Battle;
-    // }
     return Exploration;
 }
 
@@ -128,38 +83,38 @@ stateMachine enemyCheck(int heroLocation){
 checks if an enemy or world event is present. If either are, then a new state is returned. */
 stateMachine movePlayer(stateMachine_Exploration_MovePlayer currentState){
     Entity *Jima = playerEntities(1);
-    Jima->location = JimaLocation.xPos + JimaLocation.yPos;
+    Jima->location = JimaLoc.xPos + JimaLoc.yPos;
 
     checkMapBounds_Player();
     
     if (currentState == MovePlayer_Forward){
         // Below locations are for debugging purposes
-        mvprintw(13, 10, "Player location: [%d][%d]", JimaLocation.xPos, JimaLocation.yPos);
-        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLocation.xPos, SmallMonsterLocation.yPos);
+        mvprintw(13, 10, "Player location: [%d][%d]", JimaLoc.xPos, JimaLoc.yPos);
+        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLoc.xPos, SmallMonsterLoc.yPos);
 
         nextState = enemyCheck(Jima->location);
-        JimaLocation.xPos += JimaLocation.xMove;
+        JimaLoc.xPos += JimaLoc.move;
     } if (currentState == MovePlayer_Right){
         // Below locations are for debugging purposes
-        mvprintw(13, 10, "Player location: [%d][%d]", JimaLocation.xPos, JimaLocation.yPos);
-        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLocation.xPos, SmallMonsterLocation.yPos);
+        mvprintw(13, 10, "Player location: [%d][%d]", JimaLoc.xPos, JimaLoc.yPos);
+        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLoc.xPos, SmallMonsterLoc.yPos);
 
         nextState = enemyCheck(Jima->location);
-        JimaLocation.yPos += JimaLocation.yMove;
+        JimaLoc.yPos += JimaLoc.move;
     } if (currentState == MovePlayer_Down){
         // Below locations are for debugging purposes
-        mvprintw(13, 10, "Player location: [%d][%d]", JimaLocation.xPos, JimaLocation.yPos);
-        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLocation.xPos, SmallMonsterLocation.yPos);
+        mvprintw(13, 10, "Player location: [%d][%d]", JimaLoc.xPos, JimaLoc.yPos);
+        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLoc.xPos, SmallMonsterLoc.yPos);
 
         nextState = enemyCheck(Jima->location);
-        JimaLocation.xPos += -JimaLocation.xMove;
+        JimaLoc.xPos += -JimaLoc.move;
     } if (currentState == MovePlayer_Left){
         // Below locations are for debugging purposes
-        mvprintw(13, 10, "Player location: [%d][%d]", JimaLocation.xPos, JimaLocation.yPos);
-        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLocation.xPos, SmallMonsterLocation.yPos);
+        mvprintw(13, 10, "Player location: [%d][%d]", JimaLoc.xPos, JimaLoc.yPos);
+        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLoc.xPos, SmallMonsterLoc.yPos);
 
         nextState = enemyCheck(Jima->location);
-        JimaLocation.yPos += -JimaLocation.yMove;
+        JimaLoc.yPos += -JimaLoc.move;
     } 
     return nextState;
 }
@@ -173,7 +128,7 @@ stateMachine initExploration(stateMachine currentState) {
     int ch;
     while (currentState == Exploration){
         ch = input();
-        smallMonsterPath();
+        enemyPath();
         if (ch == KEY_UP){
             queuedMessage = movePlayerMessage(1);            
             callStack(queuedMessage);
