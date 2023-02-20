@@ -49,10 +49,7 @@
         Entity_Class class;
     } Entity;
 
-    
-
     Entity* newEntity(Entity_Class class, char name[50]);
-
     Entity* playerEntities (int trigger);
     Entity* enemyEntities(int trigger);
 
