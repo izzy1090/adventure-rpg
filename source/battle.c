@@ -1,6 +1,8 @@
 #include "battle.h"
 
-// Dice roll function to determine probabilities. Helpful for hitPercentage, damageCalc, etc.
+/* Dice roll function to determine probabilities. Helpful for hitPercentage, damageCalc, etc. 
+Pass in the maximum and minimum possibilities for a roll outcome. Also add an Entity stat to add to the roll
+or subtract from the roll to add more chance to the probabilities. */ 
 int system_DiceRoll(int maximum, int minimum, int add_to_roll, int subtract_from_roll) {
     int dice_roll = random() % (maximum - minimum + 1) + minimum;
     int adjusted_roll = dice_roll + add_to_roll - subtract_from_roll;
@@ -14,13 +16,14 @@ int system_DiceRoll(int maximum, int minimum, int add_to_roll, int subtract_from
     return adjusted_roll; 
 }
 
-// function to calculate how likely it is for an Attacker to hit an enemy
+// Calculates how likely it is for an Attacker to hit an enemy. Pass in the Attacker and the target as args.
 float hitCalc(Entity *Attacker, Entity *Target) {
     float hitPercentage = (Attacker->stats.dexterity) * (system_DiceRoll(6, 1, Attacker->stats.luck, Target->stats.dexterity));
     return hitPercentage;
 }
 
-// Function to check if a hit was made or not. Will also queue up messages
+/* Checks if a hit was made or not. Pass in the Attacker, Target, and hitPercentage probability 
+(as a float) as args. to determine if a hit was made. */ 
 bool hitMiss(Entity *Attacker, Entity *Target, float hitPercentage) {    
     bool trueFalse;
     if ( hitPercentage >= 43.33 ) {
@@ -33,13 +36,13 @@ bool hitMiss(Entity *Attacker, Entity *Target, float hitPercentage) {
     }   
 }
 
-// Function to calculate how much damage an attacker is doing
+// Calculates how much damage is done. Pass in an Attacker and Target entity to calculate damage based on pre-defined stats.
 int damageCalc(Entity *Attacker, Entity *Target) {
     int damage = (Attacker->stats.strength) * system_DiceRoll(6, 1, Attacker->stats.luck, Target->stats.physical_armor);
     return damage;
 }
 
-// Function to calculate how much damage is dealt
+// Applies damage on the Target Entity. Pass in the Target Entity to calculate damage amount based on pre-defined stats.
 int damageDealt(Entity *Target, int damage) {
     Target->stats.currenthp = Target->stats.currenthp - damage;
     return Target->stats.currenthp;
@@ -57,8 +60,7 @@ int damageDealt(Entity *Target, int damage) {
 //     return classDamage; 
 // }
 
-// Function to test if the target (character being attacked) is dead or not
-// returns a bool to determine death
+/*Test if Target Entity is dead and returns a bool to trigger end of the game over state. */ 
 bool areTheyDead(Entity *Target) {
     bool deadStatus;
     if (Target->stats.currenthp <= 0) {
@@ -68,39 +70,49 @@ bool areTheyDead(Entity *Target) {
     } return deadStatus; 
 }
 
+// Parent state to control the flow of battle.
 stateMachine initBattle (stateMachine currentState) {
     Entity *Jima = playerEntities(1);
     Entity *Villain = enemyEntities(1);
 
-    int ch;
-    bool hitSuccess;
-    int damageAmount;
-    float hitPercentageFloat; 
     char *queuedMessage = NULL;
+    int ch;
 
-    battleMenu();
-    while ( currentState == Battle){            
+    while (currentState == Battle){
         ch = input();
-        hitPercentageFloat = hitCalc(Jima, Villain);
-        hitSuccess = hitMiss(Jima, Villain, hitPercentageFloat);
-        if (hitSuccess) {
-            damageAmount = damageCalc(Jima, Villain);
-            damageDealt(Villain, damageAmount);
-            queuedMessage = hitOrMissMessages(1);
-            callStack(queuedMessage);
-            displayStats(Villain, 1);
-        }
-        else if (areTheyDead(Villain)){
-            queuedMessage = deadMessage(1);
-            displayStats(Villain, 0);
-            callStack(queuedMessage); 
-            currentState = GameOver;
-        }
-        else {
-            hitSuccess = false; 
-            queuedMessage = hitOrMissMessages(0); 
-            callStack(queuedMessage);
-            }
+
+
     }
     return currentState;
+    // int ch;
+    // bool hitSuccess;
+    // int damageAmount;
+    // float hitPercentageFloat; 
+    // char *queuedMessage = NULL;
+
+    // battleMenu();
+    // while ( currentState == Battle){            
+    //     ch = input();
+    //     hitPercentageFloat = hitCalc(Jima, Villain);
+    //     hitSuccess = hitMiss(Jima, Villain, hitPercentageFloat);
+    //     if (hitSuccess) {
+    //         damageAmount = damageCalc(Jima, Villain);
+    //         damageDealt(Villain, damageAmount);
+    //         queuedMessage = hitOrMissMessages(1);
+    //         callStack(queuedMessage);
+    //         displayStats(Villain, 1);
+    //     }
+    //     else if (areTheyDead(Villain)){
+    //         queuedMessage = deadMessage(1);
+    //         displayStats(Villain, 0);
+    //         callStack(queuedMessage); 
+    //         currentState = GameOver;
+    //     }
+    //     else {
+    //         hitSuccess = false; 
+    //         queuedMessage = hitOrMissMessages(0); 
+    //         callStack(queuedMessage);
+    //         }
+    // }
+    
 }

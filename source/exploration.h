@@ -8,7 +8,6 @@
     #include "maps.h"
 
     void checkMapBounds_Player();
-    void checkMapBounds_Enemy();
     void enemyPath();
     stateMachine enemyCheck(int heroLocation);
     stateMachine movePlayer(stateMachine_Exploration_MovePlayer currentState);

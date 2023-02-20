@@ -68,7 +68,7 @@ void enemyPath(){
 }
 
 /* Checks to see if the enemy and hero location match, if they do, 
-return the battle state. */
+return the battle state. Will need to include other enemy locations in the future. */
 stateMachine enemyCheck(int heroLocation){
     Entity *SmallMonster = enemyEntities(1);
     SmallMonster->location = SmallMonsterLoc.xPos + SmallMonsterLoc.yPos;
