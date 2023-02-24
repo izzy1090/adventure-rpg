@@ -43,112 +43,93 @@ void checkMapBounds_Player(){
 }
 
 /* This is currently a temporary way to handle the enemy path for a single enemy. When you invoke the function, 
-it creates a static variable a single reference point on the map which is then used to check against one 
+it creates a static variable with the same coordinates as the monster's location. This is then used to check against one 
 monster's location (the SmallMonster) to see where they are and move them around. This needs to scale to include 
-different enemies and to rely on the initial enemy location, rather than the need to create a state location 
+different enemies and to rely on the initial enemy location, rather than the need to create a static location 
 for each enemy on the map. */
-void enemyPath(){
-    Entity_Loc currentEnemyLoc = {.xPos = 3, .yPos = 2, .move = 1};
-    bool initial = currentEnemyLoc.xPos == SmallMonsterLoc.xPos && currentEnemyLoc.yPos == SmallMonsterLoc.yPos;
-    bool firstMove = currentEnemyLoc.xPos + 1 == SmallMonsterLoc.xPos && currentEnemyLoc.yPos == SmallMonsterLoc.yPos;
-    bool secondMove = currentEnemyLoc.xPos + 1 == SmallMonsterLoc.xPos && currentEnemyLoc.yPos + 1 == SmallMonsterLoc.yPos;
+void enemyMovement(){
+    Entity_Loc referenceSmallMonsterLoc = {.xPos = 3, .yPos = 2, .move = 1};
+    bool initial = referenceSmallMonsterLoc.xPos == SmallMonsterLoc.xPos && referenceSmallMonsterLoc.yPos == SmallMonsterLoc.yPos;
+    bool firstMove = referenceSmallMonsterLoc.xPos + 1 == SmallMonsterLoc.xPos && referenceSmallMonsterLoc.yPos == SmallMonsterLoc.yPos;
+    bool secondMove = referenceSmallMonsterLoc.xPos + 1 == SmallMonsterLoc.xPos && referenceSmallMonsterLoc.yPos + 1 == SmallMonsterLoc.yPos;
     bool completeLoop = TRUE;
 
     if (initial){   
-        currentEnemyLoc.xPos += currentEnemyLoc.move;
+        referenceSmallMonsterLoc.xPos += referenceSmallMonsterLoc.move;
     } else if (firstMove){
-        currentEnemyLoc.yPos += currentEnemyLoc.move;   
+        referenceSmallMonsterLoc.yPos += referenceSmallMonsterLoc.move;   
     } else if (secondMove){
-        currentEnemyLoc.yPos += -currentEnemyLoc.move;
+        referenceSmallMonsterLoc.yPos += -referenceSmallMonsterLoc.move;
     } else if (firstMove && completeLoop){
-        currentEnemyLoc.move += -currentEnemyLoc.move;
+        referenceSmallMonsterLoc.move += -referenceSmallMonsterLoc.move;
     }
-    SmallMonsterLoc.xPos = currentEnemyLoc.xPos;
-    SmallMonsterLoc.yPos = currentEnemyLoc.yPos;
-}
-
-/* Checks to see if the enemy and hero location match, if they do, 
-return the battle state. Will need to include other enemy locations in the future. */
-stateMachine enemyCheck(int heroLocation){
-    Entity *SmallMonster = enemyEntities(1);
-    SmallMonster->location = SmallMonsterLoc.xPos + SmallMonsterLoc.yPos;
-
-    if (heroLocation == SmallMonster->location){
-        return Battle;
-    } 
-    return Exploration;
+    SmallMonsterLoc.xPos = referenceSmallMonsterLoc.xPos;
+    SmallMonsterLoc.yPos = referenceSmallMonsterLoc.yPos;
 }
 
 /* Moves the player in the direction according to the passed-in state. movePlayer also 
 checks if an enemy or world event is present. If either are, then a new state is returned. */
-stateMachine movePlayer(stateMachine_Exploration_MovePlayer currentState){
-    Entity *Jima = playerEntities(1);
-    Jima->location = JimaLoc.xPos + JimaLoc.yPos;
-
+void movePlayer(stateMachine_Exploration_MovePlayer currentState){
     checkMapBounds_Player();
     
-    if (currentState == MovePlayer_Forward){
-        // Below locations are for debugging purposes
-        mvprintw(13, 10, "Player location: [%d][%d]", JimaLoc.xPos, JimaLoc.yPos);
-        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLoc.xPos, SmallMonsterLoc.yPos);
-
-        nextState = enemyCheck(Jima->location);
+    if (currentState == MovePlayer_Forward){        
         JimaLoc.xPos += JimaLoc.move;
     } if (currentState == MovePlayer_Right){
-        // Below locations are for debugging purposes
-        mvprintw(13, 10, "Player location: [%d][%d]", JimaLoc.xPos, JimaLoc.yPos);
-        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLoc.xPos, SmallMonsterLoc.yPos);
-
-        nextState = enemyCheck(Jima->location);
         JimaLoc.yPos += JimaLoc.move;
     } if (currentState == MovePlayer_Down){
-        // Below locations are for debugging purposes
-        mvprintw(13, 10, "Player location: [%d][%d]", JimaLoc.xPos, JimaLoc.yPos);
-        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLoc.xPos, SmallMonsterLoc.yPos);
-
-        nextState = enemyCheck(Jima->location);
         JimaLoc.xPos += -JimaLoc.move;
     } if (currentState == MovePlayer_Left){
-        // Below locations are for debugging purposes
-        mvprintw(13, 10, "Player location: [%d][%d]", JimaLoc.xPos, JimaLoc.yPos);
-        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLoc.xPos, SmallMonsterLoc.yPos);
-
-        nextState = enemyCheck(Jima->location);
         JimaLoc.yPos += -JimaLoc.move;
     } 
-    return nextState;
+}
+
+/* Checks to see if the enemy and hero location match, if they do, 
+return the battle state. Will need to include other enemy locations in the future. */
+void enemyCheck(int heroXLoc, int heroYLoc){
+    if (heroXLoc == SmallMonsterLoc.xPos && heroYLoc == SmallMonsterLoc.yPos){
+        nextState = Battle;
+        enemyEnountered = EnemyEncounter_SmallMonster;
+    } 
 }
 
 /* Looks for an input from the controller during the exploration state.
 Each time the forward key is pressed the character moves in a direction which triggers 
 additional states to see if there is an enemy or a world event is present. If either are 
 present a new state is returned and the state is ended. */
-stateMachine initExploration(stateMachine currentState) {
+void initExploration(stateMachine currentState) {
     char *queuedMessage = NULL;
     int ch;
     while (currentState == Exploration){
         ch = input();
-        enemyPath();
+        enemyMovement();
+        mvprintw(13, 10, "Player location: [%d][%d]", JimaLoc.xPos, JimaLoc.yPos);
+        mvprintw(14, 10, "Enemies location: [%d][%d]", SmallMonsterLoc.xPos, SmallMonsterLoc.yPos);
+
+        enemyCheck(JimaLoc.xPos, JimaLoc.yPos);
+        // This breaks the initExploration while loop after an enemy is found
+        if (nextState == Battle){
+            currentState = Battle;
+        }
         if (ch == KEY_UP){
             queuedMessage = movePlayerMessage(1);            
             callStack(queuedMessage);
-            currentState = movePlayer(MovePlayer_Forward);
+            movePlayer(MovePlayer_Forward);
         } 
         if (ch == KEY_LEFT){
             queuedMessage = movePlayerMessage(2);
             callStack(queuedMessage);
-            currentState = movePlayer(MovePlayer_Left);
+            movePlayer(MovePlayer_Left);
         } 
         if (ch == KEY_DOWN){
             queuedMessage = movePlayerMessage(3);
             callStack(queuedMessage);
-            currentState = movePlayer(MovePlayer_Down);
+            movePlayer(MovePlayer_Down);
         } 
         if (ch == KEY_RIGHT){
             queuedMessage = movePlayerMessage(4);
             callStack(queuedMessage);
-            currentState = movePlayer(MovePlayer_Right);
+            movePlayer(MovePlayer_Right);
         }
     }
-    return currentState;
+    
 }

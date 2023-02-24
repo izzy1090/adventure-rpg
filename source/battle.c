@@ -71,19 +71,15 @@ bool areTheyDead(Entity *Target) {
 }
 
 // Parent state to control the flow of battle.
-stateMachine initBattle (stateMachine currentState) {
+void initBattle (stateMachine currentState, Entity *Enemy) {
     Entity *Jima = playerEntities(1);
-    Entity *Villain = enemyEntities(1);
+    Entity *EncounteredEnemy = Enemy;
 
-    char *queuedMessage = NULL;
-    int ch;
-
-    while (currentState == Battle){
-        ch = input();
-
-
-    }
-    return currentState;
+    // for debugging purposes to show that a battle has been triggered 
+    // and the appropriate enemy was coupled with the player
+    mvprintw(16, 10, "%s", Jima->name);
+    mvprintw(17, 10, "%s", EncounteredEnemy->name);
+    
     // int ch;
     // bool hitSuccess;
     // int damageAmount;

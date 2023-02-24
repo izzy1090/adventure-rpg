@@ -19,11 +19,10 @@
     stateMachine nextState;
 
     typedef enum { Exploration_MovePlayer, Exploration_Enemy, Exploration_WorldEvent } stateMachine_Exploration;
-    stateMachine_Exploration nextExplorationState;
 
     typedef enum { MovePlayer_Forward, MovePlayer_Left, MovePlayer_Right, MovePlayer_Down } stateMachine_Exploration_MovePlayer;
-    typedef enum { Exploration_EnemyCheck, Exploration_EnemyMove } stateMachine_Exploration_Enemy;
-    typedef enum { EnemyCheck_Present, EnemyCheck_NotPresent } stateMachine_Exploration_EnemyCheck;
+    typedef enum { EnemyEncounter_SmallMonster } stateMachine_Exploration_EnemyEncounter;
+    stateMachine_Exploration_EnemyEncounter enemyEnountered;
 
     // These are just potential options for the game. We don't necessarily need to program all of these right now.
     typedef enum { Menu_Attack, Menu_Magic, Menu_Defend, Menu_Items, Menu_Escape } stateMachine_Battle;

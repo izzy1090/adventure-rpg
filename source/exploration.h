@@ -8,9 +8,9 @@
     #include "maps.h"
 
     void checkMapBounds_Player();
-    void enemyPath();
-    stateMachine enemyCheck(int heroLocation);
-    stateMachine movePlayer(stateMachine_Exploration_MovePlayer currentState);
-    stateMachine initExploration(stateMachine currentState);
+    void enemyMovement();
+    void enemyCheck(int heroXLoc, int heroYLoc);
+    void movePlayer(stateMachine_Exploration_MovePlayer currentState);
+    void initExploration(stateMachine currentState);
     
 #endif

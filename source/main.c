@@ -32,17 +32,17 @@ stateMachine initialGameState = Exploration;
 bool gameStateInitialize = TRUE;
 
 int main (void) {   
+    Entity *SmallMonster = enemyEntities(1);
     beginNCurses();
     refresh();
     while (gameStateInitialize){
         if (initialGameState == Exploration){
-            nextState = initExploration(initialGameState);
+            initExploration(initialGameState);
         } 
-        if (nextState == Battle){
-            nextState = initBattle(nextState);
+        if (nextState == Battle && enemyEnountered == EnemyEncounter_SmallMonster){
+                initBattle(Battle, SmallMonster);
         }
         if (nextState == GameOver) {
-            refresh();
             mvprintw(10, 10, "You're now in the game over state!");
         }
         // gameStateInitialize = false; 

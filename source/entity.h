@@ -43,7 +43,7 @@
     typedef struct {
         char name[20];
         char characterBio[50];
-        int location;
+        Entity_Loc location;
         Entity_Stats stats;
         Entity_Class class;
     } Entity;
