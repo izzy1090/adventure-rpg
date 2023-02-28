@@ -56,7 +56,6 @@ void printOut (char *queuedMessages){
     char *messageToPrint = queuedMessages;
         clearAndMove(0, 10);
         mvprintw(4, 4, "%s\n", messageToPrint);
-        return;
 }
 
 // Pass your queued message into the call stack where it will push it to the call stack,
@@ -68,7 +67,6 @@ void callStack(char *queuedMessages){
     enQueue(q, queuedMessage);
     printOut(queuedMessage);
     deQueue(q);
-    return;
 }
 
 // when trigger is passed a 1, then show stats
@@ -92,7 +90,6 @@ void battleMenu() {
     mvprintw(0,0,"\'e\' - to attack\n");
     mvprintw(1,0,"\'q\' - to quit\n");
     clearAndMove(3, 0);
-    return; 
 }
 
 // Function to spit back hit or miss - use 1 for hit and 0 for miss
