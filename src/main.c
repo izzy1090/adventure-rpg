@@ -1,4 +1,3 @@
-#include <genesis.h>
 #include "defines.h"
 #include "input.h"
 #include "battle.h"
@@ -12,7 +11,7 @@
 *=====================================================*/
 
 stateMachine initialGameState = Exploration;
-bool gameStateInitialize = true;
+bool gameStateInitialize = 1;
 
 int main (void) {   
     Entity *SmallMonster = enemyEntities(1);

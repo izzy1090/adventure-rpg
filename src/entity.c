@@ -6,10 +6,8 @@
 
 *==================================================*/
 
-void setName(Entity *Target, char name[50]);
-
 // Creates player and sets class to establish what stats they have.
-Entity* newEntity(Entity_Class class, char name[50]) {
+Entity* newEntity(Entity_Class class, char name[20]) {
 // allocate memory to player pointers.
 Entity *tempEntity = MEM_alloc(sizeof(Entity));
 setName(tempEntity, name);
@@ -76,17 +74,12 @@ switch(class){
     return(tempEntity); // return memory address of player.
 }
 
-// setName creates the name for our entity. Currently this function leaks memory   
-// due to strcpy which is unstable, however when the game transitions over to  
-// SGDK a different built-in function will be used. 
-void setName(Entity *Target, char name[50]) {
-    // strcpy(Target->name, name);
-    return; 
+/* Sets the name of the Entity to be whatever is passed into the name arg. */
+void setName(Entity *Target, char name[20]) {
+    strncpy(Target->name, name, 20);
+    // add a terminating character as strncpy does not provide terminating characters
+    Target->name[sizeof(Target->name) - 1] = '\0';
 }
-
-// Point the invocated results to a pointer with the name of the Entity you want to create
-// Pass in a character class to establish pre-defined stats and a name for the Entity
-Entity* newEntity(Entity_Class class, char name[50]);
 
 /* Use integers to trigger the creation and return of an Entity to play around with on a battlefield.
 This allows us to manipulate data related to location, health, and other integer based stats.
@@ -98,7 +91,7 @@ Entity* playerEntities (int trigger){
     Entity *Brock = newEntity(RANGER, "Brock");
     Entity *SeanTheMage = newEntity(MAGE, "Sean The Mage");
 
-    Entity *returnedPlayer = malloc(sizeof(Entity));
+    Entity *returnedPlayer = 0;
 
     switch(trigger){
         case 1: 
@@ -123,7 +116,7 @@ Entity* enemyEntities(int trigger){
     Entity *FlyingBanshee = newEntity(RANGER, "Flying Banshee");
     Entity *Goblin = newEntity(RANGER, "Goblin");
 
-    Entity *returnedEnemy = malloc(sizeof(Entity));
+    Entity *returnedEnemy = 0;
     
     switch (trigger){
         case 1: 

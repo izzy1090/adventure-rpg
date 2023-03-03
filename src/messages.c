@@ -2,14 +2,14 @@
 
 // Create an empty linked list container with available nodes to manipulated
 struct Queue* createQueue() {
-    struct Queue* q = (struct Queue*)malloc(sizeof(struct Queue));
+    struct Queue* q = (struct Queue*)MEM_alloc(sizeof(struct Queue));
     q->front = q->rear = NULL;
     return q; 
 }
 
 // Allocates memory for a new node that temporary holds a node being passed through the call stack.
 struct QNode* newNode(char *key) {
-    struct QNode* temp = (struct QNode*)malloc(sizeof(struct QNode));
+    struct QNode* temp = (struct QNode*)MEM_alloc(sizeof(struct QNode));
     temp->key = key; 
     temp->next = NULL;
     return temp; 

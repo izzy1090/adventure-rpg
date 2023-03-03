@@ -52,7 +52,7 @@ void enemyMovement(){
     bool initial = referenceSmallMonsterLoc.xPos == SmallMonsterLoc.xPos && referenceSmallMonsterLoc.yPos == SmallMonsterLoc.yPos;
     bool firstMove = referenceSmallMonsterLoc.xPos + 1 == SmallMonsterLoc.xPos && referenceSmallMonsterLoc.yPos == SmallMonsterLoc.yPos;
     bool secondMove = referenceSmallMonsterLoc.xPos + 1 == SmallMonsterLoc.xPos && referenceSmallMonsterLoc.yPos + 1 == SmallMonsterLoc.yPos;
-    bool completeLoop = true;
+    bool completeLoop = 1;
 
     if (initial){   
         referenceSmallMonsterLoc.xPos += referenceSmallMonsterLoc.move;
@@ -98,9 +98,10 @@ additional states to see if there is an enemy or a world event is present. If ei
 present a new state is returned and the state is ended. */
 void initExploration(stateMachine currentState) {
     // char *queuedMessage = 0;
-    
+    Entity *Jima = playerEntities(1);
     // int ch;
     while (currentState == Exploration){
+        VDP_drawText(Jima->name, 10, 10);
         // ch = input();
         enemyMovement();
         // mvprintw(13, 10, "Player location: [%d][%d]", JimaLoc.xPos, JimaLoc.yPos);

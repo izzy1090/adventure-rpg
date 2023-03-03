@@ -1,7 +1,7 @@
 #ifndef _DEFINES_H
 #define _DEFINES_H
 
-    #include <stdbool.h>
+    #include <genesis.h>
 
     /*==================================================*
 
