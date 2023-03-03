@@ -3,4 +3,4 @@ This project is designed to emulate a text-based RPG combat engine made popular 
 
 The final goal is to port the entire experience out to SGDK and deploy a demo of the game utilizing an emulator with game sprites.
 
-A more detailed Readme to describe the project is intended for the future.
+A more detailed Readme to describe the project is intended for the future. test
