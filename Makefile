@@ -104,9 +104,9 @@ boot/rom_head.o: boot/rom_head.c
 
 %.bin: %.elf
 	@echo "Stripping ELF header..."
-	@$(OBJC) -O binary $< temp.bin
-	@dd if=temp.bin of=$@ bs=8K conv=sync
-	@rm -f temp.bin
+	@$(OBJC) -O binary $< adventure-rpg.bin
+	@dd if=adventure-rpg.bin of=$@ bs=8K conv=sync
+	@rm -f adventure-rpg.bin
 
 %.elf: boot/sega.o $(OBJS)
 	@echo "Linking $@"

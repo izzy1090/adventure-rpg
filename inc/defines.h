@@ -3,6 +3,7 @@
 
     #include <genesis.h>
     #include <joy.h>
+    #include <resources.h>
 
     /*==================================================*
 
