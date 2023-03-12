@@ -1,0 +1,4 @@
+.DS_Store
+Makefile
+out.bin
+symbol.txt

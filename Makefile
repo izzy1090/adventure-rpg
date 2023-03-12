@@ -73,7 +73,7 @@ all: release
 release: OPTIONS  = -O3 -fno-web -fno-gcse -fno-unit-at-a-time -fomit-frame-pointer
 release: OPTIONS += -fshort-enums -flto -fuse-linker-plugin
 release: LIBS += -L$(MARSDEV)/m68k-elf/lib -lmd
-release: adventure-rpg.bin symbol.txt
+release: out.bin symbol.txt
 
 asm: OPTIONS  = -O3 -fno-web -fno-gcse -fno-unit-at-a-time -fomit-frame-pointer
 asm: OPTIONS += -fshort-enums
@@ -83,13 +83,13 @@ asm: asm-dir $(ASMO)
 # Gens-KMod, BlastEm and UMDK support GDB tracing, enabled by this target
 debug: OPTIONS = -g -Og -DDEBUG -DKDEBUG -fno-web -fno-gcse -fno-unit-at-a-time -fshort-enums
 debug: LIBS += -L$(MARSDEV)/m68k-elf/lib -lmd-debug
-debug: adventure-rpg.bin symbol.txt
+debug: out.bin symbol.txt
 
 # Generates a symbol table that is very helpful in debugging crashes
 # Cross reference symbol.txt with the addresses displayed in the crash handler
-symbol.txt: adventure-rpg.bin
+symbol.txt: out.bin
 	@echo "Creating symbol.txt"
-	@$(NM) --plugin=$(PLUGIN)/$(LTO_SO) -n adventure-rpg.elf > symbol.txt
+	@$(NM) --plugin=$(PLUGIN)/$(LTO_SO) -n out.elf > symbol.txt
 
 boot/sega.o: boot/rom_head.bin
 	@echo "AS boot/sega.s"
@@ -104,9 +104,9 @@ boot/rom_head.o: boot/rom_head.c
 
 %.bin: %.elf
 	@echo "Stripping ELF header..."
-	@$(OBJC) -O binary $< adventure-rpg.bin
-	@dd if=adventure-rpg.bin of=$@ bs=8K conv=sync
-	@rm -f adventure-rpg.bin
+	@$(OBJC) -O binary $< temp.bin
+	@dd if=temp.bin of=$@ bs=8K conv=sync
+	@rm -f temp.bin
 
 %.elf: boot/sega.o $(OBJS)
 	@echo "Linking $@"
@@ -136,6 +136,6 @@ asmout/%.s: %.c
 
 .PHONY: clean
 clean:
-	rm -f $(OBJS) adventure-rpg.bin adventure-rpg.elf symbol.txt
+	rm -f $(OBJS) out.bin out.elf symbol.txt
 	rm -f boot/sega.o boot/rom_head.o boot/rom_head.bin
 	rm -rf asmout
