@@ -6,7 +6,7 @@ After marsdev has been installed and setup, you need to replace the contents of 
 
 Finally clone this repo in your desired project directory within marsdev, and you should be all set to utilize make files and compile your build!
 
-The following instructions are for Mac OS only. I'm not sure if the shell script will work out of the box for Windows.
+### The following instructions are for Mac OS only. 
 
 After each build compilation, if you want to run your compiled ROM using [OpenEmu](https://openemu.org/) from the terminal to make things easier. Please edit the ```openemu.sh``` to include the file path of where your compiled rom lives. See below for reference.
 
