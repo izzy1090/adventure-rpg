@@ -2,3 +2,4 @@
 Makefile
 out.bin
 symbol.txt
+openemu.sh
