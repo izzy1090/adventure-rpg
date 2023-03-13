@@ -3,6 +3,9 @@
 #define MAP_WIDTH 10
 #define MAP_HEIGHT 10
 
+// Empty pointer for Sprite
+Sprite* fighter = NULL; 
+
 int map[MAP_WIDTH][MAP_HEIGHT] = { 
     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1}, 
     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1}, 
@@ -71,7 +74,8 @@ void enemyMovement(){
 /* Moves the player in the direction according to the passed-in state. movePlayer also 
 checks if an enemy or world event is present. If either are, then a new state is returned. */
 void movePlayer(stateMachine_Exploration_MovePlayer currentState){
-    if (currentState == MovePlayer_Forward){        
+    if (currentState == MovePlayer_Forward){  
+        SPR_setAnim(fighter, ANIM_WALK);      
         JimaLoc.yPos += JimaLoc.move;
     } else if (currentState == MovePlayer_Right){
         JimaLoc.xPos += JimaLoc.move;
@@ -124,19 +128,19 @@ void handleInputExploration(){
     }
 }
 
-/* For development purposes only! This displays the player's position as they move around the screen. */
-void updateScreen();
-void updateScreen(){
-    // chars necessary to convert integers to strings so SGDK can render them on the screen
-    // might possibly convert this into a helper function to prevent having to write this code each time
-    char playerCoords[40];
-    // sprintf is a built in method from SGDK 
-    // This takes the integers from the third arg and combines it with the 2nd arg to store it
-    // at the variable passed into the 1st arg. It operates in a similar way as printf, but is 
-    // designed specifically for integer to string conversion for SGDK
-    sprintf(playerCoords, "Player X: %d, Player Y: %d", JimaLoc.xPos, JimaLoc.yPos);
-    VDP_drawText(playerCoords, 5, 11);
-}
+// /* For development purposes only! This displays the player's position as they move around the screen. */
+// void updateScreen();
+// void updateScreen(){
+//     // chars necessary to convert integers to strings so SGDK can render them on the screen
+//     // might possibly convert this into a helper function to prevent having to write this code each time
+//     char playerCoords[40];
+//     // sprintf is a built in method from SGDK 
+//     // This takes the integers from the third arg and combines it with the 2nd arg to store it
+//     // at the variable passed into the 1st arg. It operates in a similar way as printf, but is 
+//     // designed specifically for integer to string conversion for SGDK
+//     sprintf(playerCoords, "Player X: %d, Player Y: %d", JimaLoc.xPos, JimaLoc.yPos);
+//     VDP_drawText(playerCoords, 5, 11);
+// }
 
 /* Looks for an input from the controller during the exploration state.
 Each time the forward key is pressed the character moves in a direction which triggers 
@@ -145,17 +149,24 @@ present a new state is returned and the state is ended. */
 void initExploration(stateMachine currentState) {
     JOY_init();
     JOY_setEventHandler(handleInputExploration);
+    // init Sprite engine
+    SPR_init();
+    // set palette type for sprite, point to its data and declare transfer method
+    PAL_setPalette(PAL2, animated_fighter.palette->data, DMA);
+    // add the sprite to the screen
+    fighter = SPR_addSprite(&animated_fighter, 100, 50, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
     while (currentState == Exploration){
         JOY_update();
         handleInputExploration();
-        updateScreen();
+        // make sure to update the sprite for each loop
+        SPR_update();
         enemyMovement();
         enemyCheck(JimaLoc.xPos, JimaLoc.yPos);
         // This breaks the initExploration while loop after an enemy is found
         if (nextState == Battle){
-            VDP_clearText(5, 11, 0);
             currentState = Battle;
             break;
         }
+        SYS_doVBlankProcess();
     }
 }

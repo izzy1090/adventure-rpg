@@ -7,7 +7,7 @@
 *============================================================*/
 
 // Creates player and sets class to establish what stats they have.
-Entity* newEntity(Entity_Class class, char name[20]) {
+Entity* newEntity(Entity_Class class, char *name) {
 // allocate memory to player pointers.
 Entity *tempEntity = MEM_alloc(sizeof(Entity));
 setName(tempEntity, name);
@@ -75,8 +75,11 @@ switch(class){
 }
 
 /* Sets the name of the Entity to be whatever is passed into the name arg. */
-void setName(Entity *Target, char name[20]) {
-    strncpy(Target->name, name, 20);
+void setName(Entity *Target, char *name) {
+    /* 1st arg: where you want to pass string
+       2nd arg: string you want to pass
+       3rd arg: string's length */
+    strncpy(Target->name, name, sizeof(Target->name));
     // need to add a terminating char as strncpy does not provide terminating characters
     Target->name[sizeof(Target->name) - 1] = '\0';
 }
@@ -88,20 +91,10 @@ This allows us to manipulate data related to location, health, and other integer
 Entity* playerEntities (u16 trigger){
     // You can create templates for new characters here
     Entity *Jima = newEntity(WARRIOR, "Jima");
-    Entity *Brock = newEntity(RANGER, "Brock");
-    Entity *SeanTheMage = newEntity(MAGE, "Sean The Mage");
-
-    Entity *returnedPlayer = 0;
-
+    Entity *returnedPlayer = MEM_alloc(sizeof(Entity));
     switch(trigger){
         case 1: 
             returnedPlayer = Jima;
-            break;
-        case 2: 
-            returnedPlayer = Brock;
-            break;
-        case 3: 
-            returnedPlayer = SeanTheMage;
             break;
     }
     return (returnedPlayer);
@@ -113,20 +106,12 @@ This allows us to manipulate data related to location, health, and other integer
 1: Small Monster, 2: Flying Banshee, and 3: Goblin */
 Entity* enemyEntities(u16 trigger){
     Entity *SmallMonster = newEntity(RANGER, "Small Monster");
-    Entity *FlyingBanshee = newEntity(RANGER, "Flying Banshee");
-    Entity *Goblin = newEntity(RANGER, "Goblin");
 
     Entity *returnedEnemy = 0;
     
     switch (trigger){
         case 1: 
             returnedEnemy = SmallMonster;
-            break;
-        case 2: 
-            returnedEnemy = FlyingBanshee;
-            break;
-        case 3: 
-            returnedEnemy = Goblin;
             break;
         }
     return (returnedEnemy);

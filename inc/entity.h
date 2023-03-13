@@ -47,8 +47,8 @@
         Entity_Class class;
     } Entity;
 
-    Entity* newEntity(Entity_Class class, char name[20]);
-    void setName(Entity *Target, char name[20]);
+    Entity* newEntity(Entity_Class class, char *name);
+    void setName(Entity *Target, char *name);
     Entity* playerEntities (u16 trigger);
     Entity* enemyEntities(u16 trigger);
 

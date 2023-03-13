@@ -4,6 +4,7 @@
     #include "defines.h"
     #include "entity.h"
     #include "messages.h"
+    #include "sprites.h"
 
     void checkMapBounds_Player();
     void enemyMovement();
