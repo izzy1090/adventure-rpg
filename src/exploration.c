@@ -73,12 +73,6 @@ void enemyMovement(){
     SmallMonsterLoc.xPos = refSmallMonsterLoc.xPos;
 }
 
-void checkWalkAnim(s16 newLocX, s16 newLocY){
-    
-    if (newLocX == SpriteLoc.xPos && newLocY == SpriteLoc.yPos){
-        SPR_setAnim(fighter, ANIM_IDLE);
-    } 
-}
 
 /* Moves the player in the direction according to the passed-in state. movePlayer also 
 checks if an enemy or world event is present. If either are, then a new state is returned. */
