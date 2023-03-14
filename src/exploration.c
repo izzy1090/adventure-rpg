@@ -26,6 +26,8 @@ Entity_Loc JimaLoc = {.xPos = 0, .yPos = 0, .move = 1};
 // Enemies on the map locations - we might want to consider giving certain enemy types the ability to move multiple squares
 Entity_Loc SmallMonsterLoc = {.xPos = 3, .yPos = 2, .move = 1};
 
+Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 5};
+
 /* This checks the player's location to see if it ever exceeds the boundaries of the current map. 
 The function can easily scale later on to include multiple maps. */
 void checkMapBounds_Player(){
@@ -75,16 +77,19 @@ void enemyMovement(){
 checks if an enemy or world event is present. If either are, then a new state is returned. */
 void movePlayer(stateMachine_Exploration_MovePlayer currentState){
     if (currentState == MovePlayer_Forward){  
-        SPR_setAnim(fighter, ANIM_WALK);      
-        JimaLoc.yPos += JimaLoc.move;
+        SpriteLoc.yPos += -SpriteLoc.move;
+        SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
     } else if (currentState == MovePlayer_Right){
-        JimaLoc.xPos += JimaLoc.move;
+        SpriteLoc.xPos += SpriteLoc.move;
+        SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
     } else if (currentState == MovePlayer_Down){
-        JimaLoc.yPos += -JimaLoc.move;
+        SpriteLoc.yPos += SpriteLoc.move;
+        SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
     } else if (currentState == MovePlayer_Left){
-        JimaLoc.xPos += -JimaLoc.move;
+        SpriteLoc.xPos += -SpriteLoc.move;
+        SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
     } 
-    checkMapBounds_Player();
+    // checkMapBounds_Player();
 }
 
 /* Checks to see if the enemy and hero location match, if they do, 
@@ -154,11 +159,12 @@ void initExploration(stateMachine currentState) {
     // set palette type for sprite, point to its data and declare transfer method
     PAL_setPalette(PAL2, animated_fighter.palette->data, DMA);
     // add the sprite to the screen
-    fighter = SPR_addSprite(&animated_fighter, 100, 50, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
+    fighter = SPR_addSprite(&animated_fighter, SpriteLoc.xPos, SpriteLoc.yPos, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
     while (currentState == Exploration){
         JOY_update();
         handleInputExploration();
         // make sure to update the sprite for each loop
+        VDP_waitVSync();
         SPR_update();
         enemyMovement();
         enemyCheck(JimaLoc.xPos, JimaLoc.yPos);
@@ -167,6 +173,7 @@ void initExploration(stateMachine currentState) {
             currentState = Battle;
             break;
         }
+
         SYS_doVBlankProcess();
     }
 }
