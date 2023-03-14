@@ -24,8 +24,6 @@ int main (void) {
         // if (nextState == Battle && enemyEnountered == EnemyEncounter_SmallMonster){
         //     initBattle(Battle, SmallMonster);
         // }
-
-        
     }
     return (0); 
 }

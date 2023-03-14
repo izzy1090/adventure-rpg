@@ -41,7 +41,7 @@
 
     // struct for creating new character stats
     typedef struct {
-        char name[20];
+        char *name;
         char characterBio[50];
         Entity_Stats stats;
         Entity_Class class;
