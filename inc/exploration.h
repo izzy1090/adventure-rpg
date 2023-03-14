@@ -7,6 +7,7 @@
     #include "sprites.h"
 
     void checkMapBounds_Player();
+    void checkWalkAnim(s16 newLocX, s16 newLocY);
     void enemyMovement();
     void enemyCheck(u16 heroXLoc, u16 heroYLoc);
     void movePlayer(stateMachine_Exploration_MovePlayer currentState);

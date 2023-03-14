@@ -19,14 +19,14 @@ int map[MAP_WIDTH][MAP_HEIGHT] = {
     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1}, 
 };
 
-/* Player and party locations to start. This starts off as static locations for a singular map. 
-This will need to scale as the project scales. */
+// /* Player and party locations to start. This starts off as static locations for a singular map. 
+// This will need to scale as the project scales. */
 Entity_Loc JimaLoc = {.xPos = 0, .yPos = 0, .move = 1};
 
-// Enemies on the map locations - we might want to consider giving certain enemy types the ability to move multiple squares
+// // Enemies on the map locations - we might want to consider giving certain enemy types the ability to move multiple squares
 Entity_Loc SmallMonsterLoc = {.xPos = 3, .yPos = 2, .move = 1};
 
-Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 2};
+Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 5};
 
 /* This checks the player's location to see if it ever exceeds the boundaries of the current map. 
 The function can easily scale later on to include multiple maps. */
@@ -73,22 +73,28 @@ void enemyMovement(){
     SmallMonsterLoc.xPos = refSmallMonsterLoc.xPos;
 }
 
+void checkWalkAnim(s16 newLocX, s16 newLocY){
+    
+    if (newLocX == SpriteLoc.xPos && newLocY == SpriteLoc.yPos){
+        SPR_setAnim(fighter, ANIM_IDLE);
+    } 
+}
+
 /* Moves the player in the direction according to the passed-in state. movePlayer also 
 checks if an enemy or world event is present. If either are, then a new state is returned. */
-void movePlayer(stateMachine_Exploration_MovePlayer currentState){
-    if (currentState == MovePlayer_Forward){  
+void moveSpriteLoc(stateMachine_Exploration_MovePlayer currentState){
+    if (currentState == MovePlayer_Forward){ 
         SpriteLoc.yPos += -SpriteLoc.move;
-        SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
-    } else if (currentState == MovePlayer_Right){
+    } if (currentState == MovePlayer_Right){
         SpriteLoc.xPos += SpriteLoc.move;
-        SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
-    } else if (currentState == MovePlayer_Down){
+        SPR_setHFlip(fighter, TRUE); 
+    } if (currentState == MovePlayer_Down){
         SpriteLoc.yPos += SpriteLoc.move;
-        SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
-    } else if (currentState == MovePlayer_Left){
+    } if (currentState == MovePlayer_Left){
         SpriteLoc.xPos += -SpriteLoc.move;
-        SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
+        SPR_setHFlip(fighter, FALSE); 
     } 
+    SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
     // checkMapBounds_Player();
 }
 
@@ -103,7 +109,7 @@ void enemyCheck(u16 heroXLoc, u16 heroYLoc){
 
 /* Necessary DEBOUNCE_DELAY and prevButtonPressTime var to check against 
 so inputs can't be retriggered until 100 ms have passed before the next input. */
-#define DEBOUNCE_DELAY 100
+#define DEBOUNCE_DELAY 50
 u32 prevButtonPressTime = 0; 
 
 /* Input handler used to handle the controller inputs during the exploration state. */
@@ -115,37 +121,23 @@ void handleInputExploration(){
     /* Below conditions check which input is entered and if current frame
     is 100 ms longer than when the last button press was registered. */
     if ((joypad_state & BUTTON_UP) && (currButtonPressTime - prevButtonPressTime >= DEBOUNCE_DELAY)){       
-        movePlayer(MovePlayer_Forward);
+        moveSpriteLoc(MovePlayer_Forward);
         // set the prev to curr. to check aginst future button presses
         prevButtonPressTime = currButtonPressTime;
     }
     if ((joypad_state & BUTTON_RIGHT) && (currButtonPressTime - prevButtonPressTime >= DEBOUNCE_DELAY)){
-        movePlayer(MovePlayer_Right);
+        moveSpriteLoc(MovePlayer_Right);
         prevButtonPressTime = currButtonPressTime;
     }
     if ((joypad_state & BUTTON_LEFT) && (currButtonPressTime - prevButtonPressTime >= DEBOUNCE_DELAY)){
-        movePlayer(MovePlayer_Left);
+        moveSpriteLoc(MovePlayer_Left);
         prevButtonPressTime = currButtonPressTime;
     }
     if ((joypad_state & BUTTON_DOWN) && (currButtonPressTime - prevButtonPressTime >= DEBOUNCE_DELAY)){
-        movePlayer(MovePlayer_Down);
+        moveSpriteLoc(MovePlayer_Down);
         prevButtonPressTime = currButtonPressTime;
     }
 }
-
-// /* For development purposes only! This displays the player's position as they move around the screen. */
-// void updateScreen();
-// void updateScreen(){
-//     // chars necessary to convert integers to strings so SGDK can render them on the screen
-//     // might possibly convert this into a helper function to prevent having to write this code each time
-//     char playerCoords[40];
-//     // sprintf is a built in method from SGDK 
-//     // This takes the integers from the third arg and combines it with the 2nd arg to store it
-//     // at the variable passed into the 1st arg. It operates in a similar way as printf, but is 
-//     // designed specifically for integer to string conversion for SGDK
-//     sprintf(playerCoords, "Player X: %d, Player Y: %d", JimaLoc.xPos, JimaLoc.yPos);
-//     VDP_drawText(playerCoords, 5, 11);
-// }
 
 /* Looks for an input from the controller during the exploration state.
 Each time the forward key is pressed the character moves in a direction which triggers 
@@ -162,18 +154,20 @@ void initExploration(stateMachine currentState) {
     fighter = SPR_addSprite(&animated_fighter, SpriteLoc.xPos, SpriteLoc.yPos, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
     while (currentState == Exploration){
         JOY_update();
+        
         handleInputExploration();
-        // make sure to update the sprite for each loop
-        VDP_waitVSync();
         SPR_update();
-        enemyMovement();
-        enemyCheck(JimaLoc.xPos, JimaLoc.yPos);
+        // make sure to update the sprite and screen for each loop
+        VDP_waitVSync();
+        
+        SYS_doVBlankProcess();
+        
         // This breaks the initExploration while loop after an enemy is found
         if (nextState == Battle){
             currentState = Battle;
             break;
         }
-
-        SYS_doVBlankProcess();
+        // enemyMovement();
+        // enemyCheck(JimaLoc.xPos, JimaLoc.yPos);
     }
 }

@@ -34,9 +34,9 @@
     } Entity_Class;
 
     typedef struct {
-        u16 xPos;
-        u16 yPos;
-        u16 move;
+        s16 xPos;
+        s16 yPos;
+        s16 move;
     } Entity_Loc;
 
     // struct for creating new character stats
