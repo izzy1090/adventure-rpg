@@ -26,7 +26,7 @@ Entity_Loc JimaLoc = {.xPos = 0, .yPos = 0, .move = 1};
 // Enemies on the map locations - we might want to consider giving certain enemy types the ability to move multiple squares
 Entity_Loc SmallMonsterLoc = {.xPos = 3, .yPos = 2, .move = 1};
 
-Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 5};
+Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 2};
 
 /* This checks the player's location to see if it ever exceeds the boundaries of the current map. 
 The function can easily scale later on to include multiple maps. */
