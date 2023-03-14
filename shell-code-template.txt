@@ -1,4 +1,6 @@
-// Copy the below into a '.sh' and set it up to run your rom in your emulator
-// make sure to name the file 'openemu.sh'
+/* Copy the below into a '.sh' and set it up to run your rom in your emulator
+make sure to name the file 'openemu.sh' */
+
+
 #!/bin/bash
 open -a OpenEmu "insert your ROM path here"
