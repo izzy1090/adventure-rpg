@@ -12,5 +12,6 @@
     void moveSpriteLoc(stateMachine_Exploration_MovePlayer currentState);
     void handleInputExploration();
     void initExploration(stateMachine currentState);
+    void checkWalkAnim();
     
 #endif

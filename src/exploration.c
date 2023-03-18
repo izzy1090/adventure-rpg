@@ -73,6 +73,15 @@ void enemyMovement(){
     SmallMonsterLoc.xPos = refSmallMonsterLoc.xPos;
 }
 
+void checkWalkAnim(){
+
+    s16 x = SPR_getPositionX(fighter);
+    s16 y = SPR_getPositionY(fighter);
+    if (SpriteLoc.xPos == x && SpriteLoc.yPos == y){
+        SPR_setAnim(fighter, ANIM_IDLE);
+    } else SPR_setAnim(fighter, ANIM_WALK);
+}
+
 
 /* Moves the player in the direction according to the passed-in state. movePlayer also 
 checks if an enemy or world event is present. If either are, then a new state is returned. */
@@ -88,6 +97,7 @@ void moveSpriteLoc(stateMachine_Exploration_MovePlayer currentState){
         SpriteLoc.xPos += -SpriteLoc.move;
         SPR_setHFlip(fighter, FALSE); 
     } 
+
     SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
     // checkMapBounds_Player();
 }
@@ -145,14 +155,17 @@ void initExploration(stateMachine currentState) {
     // set palette type for sprite, point to its data and declare transfer method
     PAL_setPalette(PAL2, animated_fighter.palette->data, DMA);
     // add the sprite to the screen
-    fighter = SPR_addSprite(&animated_fighter, SpriteLoc.xPos, SpriteLoc.yPos, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
+    fighter = SPR_addSprite(&animated_fighter, 100, 50, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
     while (currentState == Exploration){
         JOY_update();
         
         handleInputExploration();
+        
         SPR_update();
         // make sure to update the sprite and screen for each loop
         VDP_waitVSync();
+        checkWalkAnim();
+        
         
         SYS_doVBlankProcess();
         
