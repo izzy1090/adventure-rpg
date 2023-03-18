@@ -37,6 +37,8 @@
         s16 xPos;
         s16 yPos;
         s16 move;
+        bool walking;
+        bool stop;
     } Entity_Loc;
 
     // struct for creating new character stats

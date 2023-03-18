@@ -26,7 +26,7 @@ Entity_Loc JimaLoc = {.xPos = 0, .yPos = 0, .move = 1};
 // // Enemies on the map locations - we might want to consider giving certain enemy types the ability to move multiple squares
 Entity_Loc SmallMonsterLoc = {.xPos = 3, .yPos = 2, .move = 1};
 
-Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 5};
+Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 70, .walking = 0, .stop = 0};
 
 /* This checks the player's location to see if it ever exceeds the boundaries of the current map. 
 The function can easily scale later on to include multiple maps. */
@@ -73,32 +73,44 @@ void enemyMovement(){
     SmallMonsterLoc.xPos = refSmallMonsterLoc.xPos;
 }
 
-void checkWalkAnim(){
-
-    s16 x = SPR_getPositionX(fighter);
-    s16 y = SPR_getPositionY(fighter);
-    if (SpriteLoc.xPos == x && SpriteLoc.yPos == y){
-        SPR_setAnim(fighter, ANIM_IDLE);
-    } else SPR_setAnim(fighter, ANIM_WALK);
+void updateSpriteAnim(){
+    if (SpriteLoc.stop){
+        SPR_setAnim(fighter, ANIM_IDLE);  
+    } else if (SpriteLoc.walking) {
+        // SPR_setAnim(fighter, ANIM_WALK);
+        u32 currentTime = getTick();
+        u32 frameTime = 50; // the ms between each frame
+        u32 frameIndex = (currentTime / frameTime) % 4;
+        SPR_setAnimAndFrame(fighter, ANIM_WALK, frameIndex);
+    } 
 }
-
 
 /* Moves the player in the direction according to the passed-in state. movePlayer also 
 checks if an enemy or world event is present. If either are, then a new state is returned. */
 void moveSpriteLoc(stateMachine_Exploration_MovePlayer currentState){
-    if (currentState == MovePlayer_Forward){ 
-        SpriteLoc.yPos += -SpriteLoc.move;
-    } if (currentState == MovePlayer_Right){
-        SpriteLoc.xPos += SpriteLoc.move;
-        SPR_setHFlip(fighter, TRUE); 
-    } if (currentState == MovePlayer_Down){
-        SpriteLoc.yPos += SpriteLoc.move;
-    } if (currentState == MovePlayer_Left){
-        SpriteLoc.xPos += -SpriteLoc.move;
-        SPR_setHFlip(fighter, FALSE); 
-    } 
-
-    SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
+    // u32 currentTime = getTickCount();
+    // set the walking animation
+    s8 speed = 200;
+    // use a for loop to control the speed of movement
+    for (s8 i = 0; i < speed; i++){
+        SpriteLoc.walking = 1;
+        SpriteLoc.stop = 0;
+        updateSpriteAnim();
+        if (currentState == MovePlayer_Forward){ 
+            SpriteLoc.yPos += -SpriteLoc.move/speed;
+        } if (currentState == MovePlayer_Right){
+            SpriteLoc.xPos += SpriteLoc.move/speed;
+            SPR_setHFlip(fighter, TRUE); 
+        } if (currentState == MovePlayer_Down){
+            SpriteLoc.yPos += SpriteLoc.move/speed;
+        } if (currentState == MovePlayer_Left){
+            SpriteLoc.xPos += -SpriteLoc.move/speed;
+            SPR_setHFlip(fighter, FALSE); 
+        } 
+        
+        SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
+        VDP_waitVSync();
+    }
     // checkMapBounds_Player();
 }
 
@@ -113,7 +125,7 @@ void enemyCheck(u16 heroXLoc, u16 heroYLoc){
 
 /* Necessary DEBOUNCE_DELAY and prevButtonPressTime var to check against 
 so inputs can't be retriggered until 100 ms have passed before the next input. */
-#define DEBOUNCE_DELAY 50
+#define DEBOUNCE_DELAY 30
 u32 prevButtonPressTime = 0; 
 
 /* Input handler used to handle the controller inputs during the exploration state. */
@@ -143,6 +155,16 @@ void handleInputExploration(){
     }
 }
 
+void checkPlayerLocation () {
+    s16 lastLocX = SPR_getPositionX(fighter);
+    s16 lastLocY = SPR_getPositionY(fighter);
+
+    if (SpriteLoc.xPos == lastLocX && SpriteLoc.yPos == lastLocY){
+        SpriteLoc.stop = 1;
+        SpriteLoc.walking = 0;
+    }
+}
+
 /* Looks for an input from the controller during the exploration state.
 Each time the forward key is pressed the character moves in a direction which triggers 
 additional states to see if there is an enemy or a world event is present. If either are 
@@ -156,17 +178,17 @@ void initExploration(stateMachine currentState) {
     PAL_setPalette(PAL2, animated_fighter.palette->data, DMA);
     // add the sprite to the screen
     fighter = SPR_addSprite(&animated_fighter, 100, 50, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
+    
     while (currentState == Exploration){
+        updateSpriteAnim();
         JOY_update();
-        
         handleInputExploration();
-        
+        checkPlayerLocation();
+
+
         SPR_update();
         // make sure to update the sprite and screen for each loop
         VDP_waitVSync();
-        checkWalkAnim();
-        
-        
         SYS_doVBlankProcess();
         
         // This breaks the initExploration while loop after an enemy is found
@@ -174,7 +196,5 @@ void initExploration(stateMachine currentState) {
             currentState = Battle;
             break;
         }
-        // enemyMovement();
-        // enemyCheck(JimaLoc.xPos, JimaLoc.yPos);
     }
 }

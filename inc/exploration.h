@@ -13,5 +13,6 @@
     void handleInputExploration();
     void initExploration(stateMachine currentState);
     void checkWalkAnim();
+    void checkPlayerLocation();
     
 #endif
