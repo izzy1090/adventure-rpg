@@ -26,8 +26,6 @@ Entity_Loc JimaLoc = {.xPos = 0, .yPos = 0, .move = 1};
 // // Enemies on the map locations - we might want to consider giving certain enemy types the ability to move multiple squares
 Entity_Loc SmallMonsterLoc = {.xPos = 3, .yPos = 2, .move = 1};
 
-Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 70, .walking = 0, .stop = 0};
-
 /* This checks the player's location to see if it ever exceeds the boundaries of the current map. 
 The function can easily scale later on to include multiple maps. */
 void checkMapBounds_Player(){
@@ -73,11 +71,22 @@ void enemyMovement(){
     SmallMonsterLoc.xPos = refSmallMonsterLoc.xPos;
 }
 
+/* Checks to see if the enemy and hero location match, if they do, 
+return the battle state. Will need to include other enemy locations in the future. */
+void enemyCheck(u16 heroXLoc, u16 heroYLoc){
+    if (heroXLoc == SmallMonsterLoc.xPos && heroYLoc == SmallMonsterLoc.yPos){
+        nextState = Battle;
+        enemyEnountered = EnemyEncounter_SmallMonster;
+    } 
+}
+
+Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 10, .walking = 0, .stop = 0};
+
 void updateSpriteAnim(){
     if (SpriteLoc.stop){
         SPR_setAnim(fighter, ANIM_IDLE);  
     } else if (SpriteLoc.walking) {
-        // SPR_setAnim(fighter, ANIM_WALK);
+        SPR_setAnim(fighter, ANIM_WALK);
         u32 currentTime = getTick();
         u32 frameTime = 50; // the ms between each frame
         u32 frameIndex = (currentTime / frameTime) % 4;
@@ -92,40 +101,28 @@ void moveSpriteLoc(stateMachine_Exploration_MovePlayer currentState){
     // set the walking animation
     s8 speed = 200;
     // use a for loop to control the speed of movement
-    for (s8 i = 0; i < speed; i++){
+    // for (s8 i = 0; i < speed; i++){
         SpriteLoc.walking = 1;
         SpriteLoc.stop = 0;
-        updateSpriteAnim();
         if (currentState == MovePlayer_Forward){ 
-            SpriteLoc.yPos += -SpriteLoc.move/speed;
+            SpriteLoc.yPos += -SpriteLoc.move;
         } if (currentState == MovePlayer_Right){
-            SpriteLoc.xPos += SpriteLoc.move/speed;
+            SpriteLoc.xPos += SpriteLoc.move;
             SPR_setHFlip(fighter, TRUE); 
         } if (currentState == MovePlayer_Down){
-            SpriteLoc.yPos += SpriteLoc.move/speed;
+            SpriteLoc.yPos += SpriteLoc.move;
         } if (currentState == MovePlayer_Left){
-            SpriteLoc.xPos += -SpriteLoc.move/speed;
+            SpriteLoc.xPos += -SpriteLoc.move;
             SPR_setHFlip(fighter, FALSE); 
         } 
-        
         SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
-        VDP_waitVSync();
-    }
+    // }
     // checkMapBounds_Player();
-}
-
-/* Checks to see if the enemy and hero location match, if they do, 
-return the battle state. Will need to include other enemy locations in the future. */
-void enemyCheck(u16 heroXLoc, u16 heroYLoc){
-    if (heroXLoc == SmallMonsterLoc.xPos && heroYLoc == SmallMonsterLoc.yPos){
-        nextState = Battle;
-        enemyEnountered = EnemyEncounter_SmallMonster;
-    } 
 }
 
 /* Necessary DEBOUNCE_DELAY and prevButtonPressTime var to check against 
 so inputs can't be retriggered until 100 ms have passed before the next input. */
-#define DEBOUNCE_DELAY 30
+#define DEBOUNCE_DELAY 50
 u32 prevButtonPressTime = 0; 
 
 /* Input handler used to handle the controller inputs during the exploration state. */
@@ -161,7 +158,6 @@ void checkPlayerLocation () {
 
     if (SpriteLoc.xPos == lastLocX && SpriteLoc.yPos == lastLocY){
         SpriteLoc.stop = 1;
-        SpriteLoc.walking = 0;
     }
 }
 
@@ -184,8 +180,6 @@ void initExploration(stateMachine currentState) {
         JOY_update();
         handleInputExploration();
         checkPlayerLocation();
-
-
         SPR_update();
         // make sure to update the sprite and screen for each loop
         VDP_waitVSync();
