@@ -80,49 +80,49 @@ void enemyCheck(u16 heroXLoc, u16 heroYLoc){
     } 
 }
 
-Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 10, .walking = 0, .stop = 0};
+Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 3, .walking = 0, .stop = 0};
 
 void updateSpriteAnim(){
+    // Getting the currentTime for each frame
+    u32 currentTime = getTick();
+    // this would represent the ms counted between each frame
+    u32 frameTime = 50;
+    /* By dividing currentTime by frameTime, we get the number of frames that should have been displayed 
+    by now if the animation was played at a constant rate. The modulo operator % is used to wrap 
+    this number around to a value between 0 and 3 (inclusive), 
+    which corresponds to the 6 frames of the animation. */
+    u32 walkFrameIndex = (currentTime / frameTime) % 6;
+    SPR_setFrame(fighter, 0);
     if (SpriteLoc.stop){
-        SPR_setAnim(fighter, ANIM_IDLE);  
-    } else if (SpriteLoc.walking) {
-        SPR_setAnim(fighter, ANIM_WALK);
-        u32 currentTime = getTick();
-        u32 frameTime = 50; // the ms between each frame
-        u32 frameIndex = (currentTime / frameTime) % 4;
-        SPR_setAnimAndFrame(fighter, ANIM_WALK, frameIndex);
+        SPR_setAnimAndFrame(fighter, ANIM_IDLE, 0);
+    } else if (SpriteLoc.walking && !SpriteLoc.stop) {
+        SPR_setAnimAndFrame(fighter, ANIM_WALK, walkFrameIndex);
     } 
+    SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
 }
 
 /* Moves the player in the direction according to the passed-in state. movePlayer also 
 checks if an enemy or world event is present. If either are, then a new state is returned. */
 void moveSpriteLoc(stateMachine_Exploration_MovePlayer currentState){
-    // u32 currentTime = getTickCount();
-    // set the walking animation
-    s8 speed = 200;
-    // use a for loop to control the speed of movement
-    // for (s8 i = 0; i < speed; i++){
-        SpriteLoc.walking = 1;
-        SpriteLoc.stop = 0;
-        if (currentState == MovePlayer_Forward){ 
-            SpriteLoc.yPos += -SpriteLoc.move;
-        } if (currentState == MovePlayer_Right){
-            SpriteLoc.xPos += SpriteLoc.move;
-            SPR_setHFlip(fighter, TRUE); 
-        } if (currentState == MovePlayer_Down){
-            SpriteLoc.yPos += SpriteLoc.move;
-        } if (currentState == MovePlayer_Left){
-            SpriteLoc.xPos += -SpriteLoc.move;
-            SPR_setHFlip(fighter, FALSE); 
-        } 
-        SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
-    // }
+    SpriteLoc.walking = 1;
+    SpriteLoc.stop = 0;
+    if (currentState == MovePlayer_Forward){ 
+        SpriteLoc.yPos += -SpriteLoc.move;
+    } if (currentState == MovePlayer_Right){
+        SpriteLoc.xPos += SpriteLoc.move;
+        SPR_setHFlip(fighter, TRUE); 
+    } if (currentState == MovePlayer_Down){
+        SpriteLoc.yPos += SpriteLoc.move;
+    } if (currentState == MovePlayer_Left){
+        SpriteLoc.xPos += -SpriteLoc.move;
+        SPR_setHFlip(fighter, FALSE); 
+    } 
     // checkMapBounds_Player();
 }
 
 /* Necessary DEBOUNCE_DELAY and prevButtonPressTime var to check against 
 so inputs can't be retriggered until 100 ms have passed before the next input. */
-#define DEBOUNCE_DELAY 50
+#define DEBOUNCE_DELAY 10
 u32 prevButtonPressTime = 0; 
 
 /* Input handler used to handle the controller inputs during the exploration state. */
@@ -158,6 +158,7 @@ void checkPlayerLocation () {
 
     if (SpriteLoc.xPos == lastLocX && SpriteLoc.yPos == lastLocY){
         SpriteLoc.stop = 1;
+        SpriteLoc.walking = 0;
     }
 }
 
@@ -174,12 +175,11 @@ void initExploration(stateMachine currentState) {
     PAL_setPalette(PAL2, animated_fighter.palette->data, DMA);
     // add the sprite to the screen
     fighter = SPR_addSprite(&animated_fighter, 100, 50, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
-    
     while (currentState == Exploration){
+        checkPlayerLocation();
         updateSpriteAnim();
         JOY_update();
         handleInputExploration();
-        checkPlayerLocation();
         SPR_update();
         // make sure to update the sprite and screen for each loop
         VDP_waitVSync();
