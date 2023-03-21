@@ -5,6 +5,7 @@
 
 // Empty pointer for Sprite
 Sprite* fighter = NULL; 
+Sprite* littleGuy = NULL;
 
 int map[MAP_WIDTH][MAP_HEIGHT] = { 
     {0, 1, 0, 1, 0, 1, 0, 1, 0, 1}, 
@@ -83,22 +84,24 @@ void enemyCheck(u16 heroXLoc, u16 heroYLoc){
 Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 3, .walking = 0, .stop = 0};
 
 void updateSpriteAnim(){
+    /* For Final Fight Sprite */
     // Getting the currentTime for each frame
     u32 currentTime = getTick();
     // this would represent the ms counted between each frame
-    u32 frameTime = 50;
-    /* By dividing currentTime by frameTime, we get the number of frames that should have been displayed 
-    by now if the animation was played at a constant rate. The modulo operator % is used to wrap 
-    this number around to a value between 0 and 3 (inclusive), 
-    which corresponds to the 6 frames of the animation. */
-    u32 walkFrameIndex = (currentTime / frameTime) % 6;
-    SPR_setFrame(fighter, 0);
+    // u32 frameTime = 50;
+    // u32 walkFrameIndex = (currentTime / frameTime) % 6;
+    // SPR_setFrame(fighter, 0);
+    u32 frameTime = 100;
+    u32 walkFrameIndex = (currentTime / frameTime) % 4;
     if (SpriteLoc.stop){
-        SPR_setAnimAndFrame(fighter, ANIM_IDLE, 0);
-    } else if (SpriteLoc.walking && !SpriteLoc.stop) {
-        SPR_setAnimAndFrame(fighter, ANIM_WALK, walkFrameIndex);
+        SPR_setAnimAndFrame(littleGuy, NULL, 0);
+        // SPR_setAnimAndFrame(fighter, ANIM_IDLE, 0);
+    } else if (SpriteLoc.walking) {
+        SPR_setAnimAndFrame(littleGuy, ANIM_WALK, walkFrameIndex);
+        // SPR_setAnimAndFrame(fighter, ANIM_WALK, walkFrameIndex);
     } 
-    SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
+    SPR_setPosition(littleGuy, SpriteLoc.xPos, SpriteLoc.yPos);
+    // SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
 }
 
 /* Moves the player in the direction according to the passed-in state. movePlayer also 
@@ -110,12 +113,12 @@ void moveSpriteLoc(stateMachine_Exploration_MovePlayer currentState){
         SpriteLoc.yPos += -SpriteLoc.move;
     } if (currentState == MovePlayer_Right){
         SpriteLoc.xPos += SpriteLoc.move;
-        SPR_setHFlip(fighter, TRUE); 
+        // SPR_setHFlip(fighter, TRUE); 
     } if (currentState == MovePlayer_Down){
         SpriteLoc.yPos += SpriteLoc.move;
     } if (currentState == MovePlayer_Left){
         SpriteLoc.xPos += -SpriteLoc.move;
-        SPR_setHFlip(fighter, FALSE); 
+        // SPR_setHFlip(fighter, FALSE); 
     } 
     // checkMapBounds_Player();
 }
@@ -153,8 +156,10 @@ void handleInputExploration(){
 }
 
 void checkPlayerLocation () {
-    s16 lastLocX = SPR_getPositionX(fighter);
-    s16 lastLocY = SPR_getPositionY(fighter);
+    // s16 lastLocX = SPR_getPositionX(fighter);
+    // s16 lastLocY = SPR_getPositionY(fighter);
+    s16 lastLocX = SPR_getPositionX(littleGuy);
+    s16 lastLocY = SPR_getPositionY(littleGuy);
 
     if (SpriteLoc.xPos == lastLocX && SpriteLoc.yPos == lastLocY){
         SpriteLoc.stop = 1;
@@ -172,9 +177,11 @@ void initExploration(stateMachine currentState) {
     // init Sprite engine
     SPR_init();
     // set palette type for sprite, point to its data and declare transfer method
-    PAL_setPalette(PAL2, animated_fighter.palette->data, DMA);
+    // PAL_setPalette(PAL2, animated_fighter.palette->data, DMA);
+    PAL_setPalette(PAL2, small_guy.palette->data, DMA);
     // add the sprite to the screen
-    fighter = SPR_addSprite(&animated_fighter, 100, 50, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
+    // fighter = SPR_addSprite(&animated_fighter, 100, 50, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
+    littleGuy = SPR_addSprite(&small_guy, 100, 50, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
     while (currentState == Exploration){
         checkPlayerLocation();
         updateSpriteAnim();

@@ -6,3 +6,4 @@
 # Choose the animation speed, remmeber that the sprite changes every x cycles per second 
 
 SPRITE animated_fighter "animated sprite 15 16.png" 15 16 FAST 15
+SPRITE small_guy "player-g.png" 2 2 FAST 0
