@@ -86,20 +86,21 @@ Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 3, .walking = 0, .stop 
 void updateSpriteAnim(){
     /* For Final Fight Sprite */
     // Getting the currentTime for each frame
-    u32 currentTime = getTick();
+    // u32 currentTime = getTick();
     // this would represent the ms counted between each frame
     // u32 frameTime = 50;
     // u32 walkFrameIndex = (currentTime / frameTime) % 6;
     // SPR_setFrame(fighter, 0);
-    u32 frameTime = 100;
-    u32 walkFrameIndex = (currentTime / frameTime) % 4;
+    // u32 frameTime = 25;
+    // u32 walkFrameIndex = (currentTime / frameTime) % 4;
     if (SpriteLoc.stop){
         SPR_setAnimAndFrame(littleGuy, NULL, 0);
         // SPR_setAnimAndFrame(fighter, ANIM_IDLE, 0);
-    } else if (SpriteLoc.walking) {
-        SPR_setAnimAndFrame(littleGuy, ANIM_WALK, walkFrameIndex);
-        // SPR_setAnimAndFrame(fighter, ANIM_WALK, walkFrameIndex);
     } 
+    // else if (SpriteLoc.walking) {
+       
+    //     // SPR_setAnimAndFrame(fighter, ANIM_WALK, walkFrameIndex);
+    // } 
     SPR_setPosition(littleGuy, SpriteLoc.xPos, SpriteLoc.yPos);
     // SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
 }
@@ -107,16 +108,23 @@ void updateSpriteAnim(){
 /* Moves the player in the direction according to the passed-in state. movePlayer also 
 checks if an enemy or world event is present. If either are, then a new state is returned. */
 void moveSpriteLoc(stateMachine_Exploration_MovePlayer currentState){
+    u32 currentTime = getTick();
+    u32 frameTime = 25;
+    u32 walkFrameIndex = (currentTime / frameTime) % 4;
     SpriteLoc.walking = 1;
     SpriteLoc.stop = 0;
     if (currentState == MovePlayer_Forward){ 
+        SPR_setAnimAndFrame(littleGuy, ANIM_WALK_BACK, walkFrameIndex);
         SpriteLoc.yPos += -SpriteLoc.move;
     } if (currentState == MovePlayer_Right){
+        SPR_setAnimAndFrame(littleGuy, ANIM_WALK_RIGHT, walkFrameIndex);
         SpriteLoc.xPos += SpriteLoc.move;
         // SPR_setHFlip(fighter, TRUE); 
     } if (currentState == MovePlayer_Down){
+        SPR_setAnimAndFrame(littleGuy, ANIM_WALK_FORWARD, walkFrameIndex);
         SpriteLoc.yPos += SpriteLoc.move;
     } if (currentState == MovePlayer_Left){
+        SPR_setAnimAndFrame(littleGuy, ANIM_WALK_LEFT, walkFrameIndex);
         SpriteLoc.xPos += -SpriteLoc.move;
         // SPR_setHFlip(fighter, FALSE); 
     } 
