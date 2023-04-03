@@ -84,25 +84,9 @@ void enemyCheck(u16 heroXLoc, u16 heroYLoc){
 Entity_Loc SpriteLoc = {.xPos = 100, .yPos = 50, .move = 3, .walking = 0, .stop = 0};
 
 void updateSpriteAnim(){
-    /* For Final Fight Sprite */
-    // Getting the currentTime for each frame
-    // u32 currentTime = getTick();
-    // this would represent the ms counted between each frame
-    // u32 frameTime = 50;
-    // u32 walkFrameIndex = (currentTime / frameTime) % 6;
-    // SPR_setFrame(fighter, 0);
-    // u32 frameTime = 25;
-    // u32 walkFrameIndex = (currentTime / frameTime) % 4;
     if (SpriteLoc.stop){
         SPR_setAnimAndFrame(littleGuy, NULL, 0);
-        // SPR_setAnimAndFrame(fighter, ANIM_IDLE, 0);
-    } 
-    // else if (SpriteLoc.walking) {
-       
-    //     // SPR_setAnimAndFrame(fighter, ANIM_WALK, walkFrameIndex);
-    // } 
-    SPR_setPosition(littleGuy, SpriteLoc.xPos, SpriteLoc.yPos);
-    // SPR_setPosition(fighter, SpriteLoc.xPos, SpriteLoc.yPos);
+    } else SPR_setPosition(littleGuy, SpriteLoc.xPos, SpriteLoc.yPos);
 }
 
 /* Moves the player in the direction according to the passed-in state. movePlayer also 
@@ -164,8 +148,6 @@ void handleInputExploration(){
 }
 
 void checkPlayerLocation () {
-    // s16 lastLocX = SPR_getPositionX(fighter);
-    // s16 lastLocY = SPR_getPositionY(fighter);
     s16 lastLocX = SPR_getPositionX(littleGuy);
     s16 lastLocY = SPR_getPositionY(littleGuy);
 
@@ -185,10 +167,8 @@ void initExploration(stateMachine currentState) {
     // init Sprite engine
     SPR_init();
     // set palette type for sprite, point to its data and declare transfer method
-    // PAL_setPalette(PAL2, animated_fighter.palette->data, DMA);
     PAL_setPalette(PAL2, small_guy.palette->data, DMA);
     // add the sprite to the screen
-    // fighter = SPR_addSprite(&animated_fighter, 100, 50, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
     littleGuy = SPR_addSprite(&small_guy, 100, 50, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
     while (currentState == Exploration){
         checkPlayerLocation();
@@ -197,7 +177,6 @@ void initExploration(stateMachine currentState) {
         handleInputExploration();
         SPR_update();
         // make sure to update the sprite and screen for each loop
-        VDP_waitVSync();
         SYS_doVBlankProcess();
         
         // This breaks the initExploration while loop after an enemy is found

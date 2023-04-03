@@ -13,8 +13,9 @@
 stateMachine initialGameState = Exploration;
 bool gameStateInitialize = 1;
 
+
 int main (void) {  
-    Entity *SmallMonster = enemyEntities(1);
+    // Entity *SmallMonster = enemyEntities(1);
 
     while (gameStateInitialize){
 
@@ -24,6 +25,7 @@ int main (void) {
         // if (nextState == Battle && enemyEnountered == EnemyEncounter_SmallMonster){
         //     initBattle(Battle, SmallMonster);
         // }
+        
     }
     return (0); 
 }
