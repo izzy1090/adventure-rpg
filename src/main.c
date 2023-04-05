@@ -13,7 +13,6 @@
 stateMachine initialGameState = Exploration;
 bool gameStateInitialize = 1;
 
-
 int main (void) {  
     // Entity *SmallMonster = enemyEntities(1);
 

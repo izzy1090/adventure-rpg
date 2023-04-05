@@ -19,6 +19,8 @@
     typedef enum { Exploration_MovePlayer, Exploration_Enemy, Exploration_WorldEvent } stateMachine_Exploration;
 
     typedef enum { MovePlayer_Forward, MovePlayer_Left, MovePlayer_Right, MovePlayer_Down } stateMachine_Exploration_MovePlayer;
+    typedef enum { vertUp, vertDown, vertNone } directionVertical;
+    typedef enum { horiLeft, horiRight, horiNone } directionHorizontal;
     typedef enum { EnemyEncounter_SmallMonster } stateMachine_Exploration_EnemyEncounter;
     stateMachine_Exploration_EnemyEncounter enemyEnountered;
 
@@ -29,5 +31,20 @@
     typedef enum { GameOver_Win, GameOver_Lose } stateMachine_GameOver;
     typedef enum { GameOver_WinCredits } stateMachine_GameOver_Win;
     typedef enum { GameOver_LoseCredits } stateMachine_GameOver_Lose;
+
+    typedef struct {
+        u32 x;
+        u32 y;
+    } Point;
+
+    typedef struct {
+        Point cameraPosition;
+        directionVertical cameraDirectionVertical;
+        directionHorizontal cameraDirectionHorizontal;
+        u16 verticalSpeed;
+        u16 horizontalSpeed;
+    } Camera;
+
+    // Camera exploration_camera = {{0, 0}, vertNone, horiNone, 1, 1};
 
 #endif
