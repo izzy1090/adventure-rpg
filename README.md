@@ -1,6 +1,3 @@
-ff
-
-
 Before you clone this repo and get coding you need to setup a local dev environment and all the env required for SGDK as well as associated toolchains.
 
 To setup a env and a local dev. environment, please follow the instructions on [marsdev](https://github.com/andwn/marsdev). 
