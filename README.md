@@ -1,3 +1,9 @@
+### Game development has switched over to another repository. To track development, please see [Stellar Winds](https://github.com/izzy1090/StellarWinds?organization=izzy1090&organization=izzy1090) for updates on future development.
+
+
+
+
+
 Before you clone this repo and get coding you need to setup a local dev environment and all the env required for SGDK as well as associated toolchains.
 
 To setup a env and a local dev. environment, please follow the instructions on [marsdev](https://github.com/andwn/marsdev). 
