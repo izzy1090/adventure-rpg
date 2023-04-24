@@ -21,4 +21,3 @@ open -a OpenEmu "add the exact filepath of where your rom lives inside these quo
 ```
 
 After you've set your filepath, simply run the ```openemu.sh``` file in your desired terminal. For example, if you're working with VSCode, you can right-click the file and choose "Run Code" and it should run the rom in OpenEmu. 
-f
